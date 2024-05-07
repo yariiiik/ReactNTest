@@ -1,25 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+
+import { Keyboard } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import Tabs from './tabs';
 
 export default function App() {
+  
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
+
+  useEffect(() => {
+      const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+          setKeyboardStatus(true);
+      });
+      const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+          setKeyboardStatus(false);
+      }); 
+
+      return () => {
+          showSubscription.remove();
+          hideSubscription.remove();
+      };
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Здарова збл!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Tabs keyboardStatus={keyboardStatus}/>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ee9',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text:{
-    color:"#933",
-    fontSize:26, 
-    fontWeight:"900"
-  }
-});
+
