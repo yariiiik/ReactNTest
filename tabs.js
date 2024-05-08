@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from "./screens/HomeScreen";
 import PostScreen from "./screens/PostScreen";
 import SettingsScreen from "./screens/SettingsScreen";
@@ -8,10 +10,10 @@ import SettingsScreen from "./screens/SettingsScreen";
 const Tab = createBottomTabNavigator();
 
 export default function Tabs({ keyboardStatus }) {
-	// const navigation = useNavigation(); // Инициализируем хук useNavigation
-	// useEffect(() => {
-	//     navigation.setParams({ keyboardStatus }); // Передаем параметр keyboardStatus через навигацию
-	// }, [keyboardStatus]);
+	const navigation = useNavigation(); // Инициализируем хук useNavigation
+	useEffect(() => {
+	    navigation.setParams({ keyboardStatus }); // Передаем параметр keyboardStatus через навигацию
+	}, [keyboardStatus]);
 
 	console.log("Tabs=", keyboardStatus);
 	return (
