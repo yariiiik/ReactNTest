@@ -5,15 +5,17 @@ import Header from "../components/Header";
 import List from '../components/List';
 import Form from "../components/Form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
 
 export default function HomeScreen({ route }) {
 	let keyboardStatus = false;
+	let donetodo = 0;
+
 
 	if (route.params && route.params.keyboardStatus !== undefined) {
 		keyboardStatus = route.params.keyboardStatus;
 	}
 
-	// console.log("HomeScreen=", keyboardStatus);
 	const [listtodos, setListtodos] = useState([
 		{
 			text: "Создать первое напоминание)",
@@ -21,6 +23,12 @@ export default function HomeScreen({ route }) {
 			checked: false,
 		},
 	]);
+
+	listtodos.forEach((el) => el.checked ? ++donetodo : null);
+	console.log("HomeScreen -> donetodo", donetodo);
+
+	const widthAnim = useSharedValue(`${((donetodo / listtodos.length) || 0) * 100}%`);
+	widthAnim.value = withSpring(`${((donetodo / listtodos.length) || 0) * 100}%`, { stiffness: 500, damping: 20 });
 
 	useEffect(() => {
 		AsyncStorage.getItem("myKey")
@@ -74,6 +82,12 @@ export default function HomeScreen({ route }) {
 		}
 	};
 
+	const widthStyle = useAnimatedStyle(() => {
+		return {
+			width: widthAnim.value
+		};
+	});
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<StatusBar
@@ -87,16 +101,26 @@ export default function HomeScreen({ route }) {
 				translucent={false}
 				networkActivityIndicatorVisible={true}
 			/>
-			<Header />
+			<Header listlen={listtodos.length} donetodo={donetodo} />
+
 			<View style={[styles.body, { marginBottom: keyboardStatus ? 2 : 100 }]}>
+
+				<View style={{ flexDirection: "row", justifyContent: "left", }}>
+					<Animated.View style={[widthStyle]}>
+						<View style={[styles.progress, { /*width: `${(donetodo / listtodos.length) * 100}%`,*/ backgroundColor: `rgba(${255 - (donetodo / listtodos.length) * 148},${(donetodo / listtodos.length) * 158},34,.9)`, },]} >
+						</View>
+					</Animated.View>
+					<View style={{ width: 10, height: 10, backgroundColor: "#e24", borderRadius: 5, zIndex: 1000, overflow: "visible", top: -4 }}></View>
+				</View>
+
 				<Form addTask={addTask} />
 				<FlatList data={listtodos} renderItem={({ item }) =>
-                    <List
-                        element={item}
-                        deleteElement={deleteElement}
-                        toggleCheckbox={toggleCheckbox} // Передаем функцию toggleCheckbox в компонент List
-                    />
-                } />
+					<List
+						element={item}
+						deleteElement={deleteElement}
+						toggleCheckbox={toggleCheckbox} // Передаем функцию toggleCheckbox в компонент List
+					/>
+				} />
 			</View>
 		</SafeAreaView>
 	);
@@ -109,15 +133,18 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	stausba: {},
+
 	body: {
 		flex: 1,
 		width: "100%",
 		backgroundColor: "snow",
 		borderWidth: 1,
 		justifyContent: "space-evenly",
-
+		zIndex: 1,
 		paddingBottom: 5,
 		borderWidth: 0,
+	},
+	progress: {
+		height: 3,
 	},
 });
