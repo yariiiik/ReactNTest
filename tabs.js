@@ -76,7 +76,8 @@ export default function Tabs({ keyboardStatus }) {
 				name="Settings"
 				component={SettingsScreen}
 				options={{
-					title: "настрійки))",
+					// title: "настрійки))",
+					headerShown: false,
 				}}
 			/>
 		</Tab.Navigator>
