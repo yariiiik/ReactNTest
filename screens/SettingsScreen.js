@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, ScrollView } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, FlatList } from "react-native";
 
 
 export default function SettingsScreen() {
@@ -35,28 +35,59 @@ export default function SettingsScreen() {
 		const todayDay = today.getDate();
 		const todayMonth = today.getMonth();
 		let UserDate = getUserDate();
-		let day, month, currentshift, dennedeli, dateText;
-		let massDate = [];
+		let day, month, dennedeli, dateText;
+		let massObjData = [];
 		while (UserDate.startD <= UserDate.endD) {
+			let currentshifts = [];
 			day = UserDate.startD.getDate();
 			month = UserDate.endD.getMonth() + 1;
 
 			dateText = `${day < 10 ? '0' + day : day}.${month < 10 ? '0' + month : month}`;
 			dennedeli = dninedeli.at(UserDate.startDayOfYear % 7);
 
-			currentshift = graf_shifts.at((UserDate.startDayOfYear + print_shift) % graf_shifts.length);
-
-
-			massDate.push([<CellDate _={todayDay == day && (todayMonth + 1) == month} T={dateText} />, <Denned dn={dennedeli} />, <Yachejka el={currentshift} />]);
+			print_shift.forEach(element => {
+				currentshifts.push(graf_shifts[(UserDate.startDayOfYear + element) % graf_shifts.length])
+			});
+			// massObjData.push([<CellDate _={todayDay == day && (todayMonth + 1) == month} T={dateText} />, <Denned dn={dennedeli} />, <Yachejka el={currentshift} />]);
+			massObjData.push({ day: dateText, weekDay: dennedeli, shifts: currentshifts });
 
 			UserDate.startDayOfYear++;
 			UserDate.startD.setDate(UserDate.startD.getDate() + 1);
 		}
-		return massDate;
+		return massObjData;
 	};
+	// console.log("🚀 ~ createMassDate ~ massObjData:", createMassDate([14,0]))
 
-	const CellDate = ({ _, T }) => {
-		return (<Text style={_ ? styles.dateToday : styles.date}>{T}</Text>)
+	const getTodayDate = () => {
+		const today = new Date();
+		const todayDay = today.getDate();
+		const todayMonth = today.getMonth() + 1;
+		return { todayDay, todayMonth };
+	}
+	const { todayDay, todayMonth } = getTodayDate();
+
+	const renderItem = ({ item }) => {
+
+		return (
+			<View style={styles.row}>
+				<CellDate today={item.day === `${todayDay}.${todayMonth}`} T={item.day} />
+				<WeekDay dn={item.weekDay} />
+				{item.shifts.map((element) => (
+					<Yachejka el={element} />
+				))}
+			</View>
+		)
+	}
+
+
+
+
+	const CellDate = ({ today, T }) => {
+		return (<Text style={today ? styles.dateToday : styles.date}>{T}</Text>)
+	};
+	const WeekDay = ({ dn }) => {
+		if (dn == "Сб" || dn == "Вс") { return (<Text style={styles.textDenNedV}>{dn}</Text>) }
+		return (<Text style={styles.textDenNed}>{dn}</Text>)
 	};
 	const Yachejka = ({ el }) => {
 		if (el == "N") { return (<Text style={styles.textN}>{el}</Text>) }
@@ -65,34 +96,25 @@ export default function SettingsScreen() {
 
 		return (<Text style={styles.text}>{el}</Text>)
 	};
-	const Denned = ({ dn }) => {
-		if (dn == "Сб" || dn == "Вс") { return (<Text style={styles.textDenNedV}>{dn}</Text>) }
 
-		return (<Text style={styles.textDenNed}>{dn}</Text>)
-	};
 
 
 	return (
-		<SafeAreaView style={{ borderWidth: 0, borderColor: "#090", padding: 3, height: "100%" }}>
-			<ScrollView>
-				<View style={styles.container}>
-					<View style={{ borderWidth: 1, width: "40%", }}>
-						{createMassDate(shifts[1]).map((element, index) => (
-							<View key={index} style={styles.view1}>
-								{/* <View style={styles.view2}> */}
-								{element[0]}{element[1]}
-								{/* </View> */}
-								{element[2]}
-							</View>
-						))}
-					</View>
-
-					<View style={styles.shift}>
-						<Text>buttons</Text>
-					</View>
-
+		<SafeAreaView style={{ borderWidth: 0, borderColor: "#090", padding: 0, height: "100%" }}>
+			<View style={styles.container}>
+				<View style={{ borderWidth: 1, width: "80%", }}>
+					<FlatList
+						data={createMassDate([shifts[1],shifts[0],shifts[2],shifts[3]])}
+						renderItem={renderItem}
+						keyExtractor={(item, index) => index.toString()}
+						contentContainerStyle={{ paddingVertical: 5 }}
+					/>
 				</View>
-			</ScrollView>
+
+				<View style={styles.shift}>
+					<Text>buttons</Text>
+				</View>
+			</View>
 			<View style={{ height: 90, borderWidth: 0, borderColor: "#900", backgroundColor: "#eea" }}></View>
 		</SafeAreaView>
 	);
@@ -106,22 +128,21 @@ const styles = StyleSheet.create({
 		// justifyContent: "space-evenly",
 		// alignItems: "stretch",
 		flexDirection: "row",
-		flexWrap: "wrap",
-		textAlign: "center",
-		paddingBottom: 10,
+		// flexWrap: "wrap",
+		// textAlign: "center",
+		paddingBottom: 3,
 		paddingTop: 10,
 		paddingLeft: 10,
-		borderWidth: 1,
+		borderWidth: 0,
+		borderColor: "#0f0",
+		// width: "50%",
 	},
-	view1: {
+	row: {
 		flexDirection: 'row',
-		// overflow: "hidden",
-		// height: 40
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		marginVertical: 3,
 	},
-	// view2: {
-	// 	flexDirection: "row",
-	// 	width: "70%"
-	// },
 	date: {
 		textAlign: "center",
 		textAlignVertical: "center",
