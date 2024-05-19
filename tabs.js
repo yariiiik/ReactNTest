@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "./screens/HomeScreen";
 import PostScreen from "./screens/PostScreen";
 import SettingsScreen from "./screens/SettingsScreen";
@@ -11,11 +12,17 @@ const Tab = createBottomTabNavigator();
 
 export default function Tabs({ keyboardStatus }) {
 	const navigation = useNavigation(); // Инициализируем хук useNavigation
+	const [notdonetodo, setNotDoneTodo] = useState(0);
+
+	// const handleUpdateData = (newnotdonetodo) => {
+	// 	setNotDoneTodo(newnotdonetodo);
+	//   };
+
 	useEffect(() => {
-	    navigation.setParams({ keyboardStatus }); // Передаем параметр keyboardStatus через навигацию
+		navigation.setParams({ keyboardStatus }); // Передаем параметр keyboardStatus через навигацию
 	}, [keyboardStatus]);
 
-	console.log("Tabs=", keyboardStatus);
+	// console.log("Tabs=keyboardStatus=", keyboardStatus);
 	return (
 		<Tab.Navigator
 			initialRouteName="Home"
@@ -24,6 +31,7 @@ export default function Tabs({ keyboardStatus }) {
 				// headerShown:false,
 				headerTitleAlign: "center",
 				tabBarActiveTintColor: "#464",
+
 				tabBarInactiveTintColor: "gray",
 				tabBarIcon: ({ focused, color, size }) => {
 					let iconName;
@@ -33,7 +41,9 @@ export default function Tabs({ keyboardStatus }) {
 					} else if (route.name === "Post") {
 						iconName = focused ? "balloon" : "balloon-outline";
 					} else if (route.name === "Settings") {
-						iconName = focused ? "settings" : "settings-outline";
+						iconName = focused ? "calendar" : "calendar-outline";
+					// } else if (route.name === "Settings") {
+					// 	iconName = focused ? "settings" : "settings-outline";
 					}
 					// Можете использовать любые иконки из Ionicons или другие
 					return <Ionicons name={iconName} size={size} color={color} />;
@@ -60,15 +70,28 @@ export default function Tabs({ keyboardStatus }) {
 				},
 			})}
 		>
-			<Tab.Screen name="Post" component={PostScreen} />
+			<Tab.Screen
+				name="Post"
+				component={PostScreen}
+				options={{
+					// title: "настрійки))",
+					// headerShown: false,
+					// headerStyle: {
+					// 	backgroundColor: "lightblue",
+					// 	borderTopWidth: 3,
+					// 	borderColor: "#000000",
+					// },
+				}}
+			/>
 			<Tab.Screen
 				name="Home"
 				component={HomeScreen}
-				// initialParams={{ keyboardStatus: keyboardStatus }}
+				// initialParams={{ handleUpdateData }}
 				options={{
 					tabBarShowLabel: true,
 					tabBarHideOnKeyboard: true,
 					headerShown: false,
+					// tabBarBadge: notdonetodo,
 				}}
 			/>
 
@@ -76,8 +99,14 @@ export default function Tabs({ keyboardStatus }) {
 				name="Settings"
 				component={SettingsScreen}
 				options={{
-					// title: "настрійки))",
+					title: "График =================",
 					headerShown: false,
+					headerStyle: {
+						height:40,
+						// backgroundColor: "lightblue",
+						borderTopWidth: 0,
+						// borderColor: "#000000",
+					},
 				}}
 			/>
 		</Tab.Navigator>
