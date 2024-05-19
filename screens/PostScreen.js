@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button,ImageBackground, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get('window');
 
 export default function PostScreen() {
 	const [cryptoData, setCryptoData] = useState("");
@@ -16,7 +18,7 @@ export default function PostScreen() {
 			// const response = await fetch('https://www.binance.com/api/v1/ticker/allBookTickers');
 			console.log("function Trading Status response: ", response.status);
 			const cripta = await response.json().catch(() => null);
-			console.log("cripta: ", cripta);
+			// console.log("cripta: ", cripta);
 			let message = `${coin1.slice(0, 3) + ' / ' + coin1.slice(4)} => ${(+cripta.result[coin1].ticker.last).toFixed(2)}\n
 			${coin2.slice(0, 3) + ' / ' + coin2.slice(4)} => ${(+cripta.result[coin2].ticker.last).toFixed(2)}\n
 			${coin3.slice(0, 3) + ' / ' + coin3.slice(4)} => ${(+cripta.result[coin3].ticker.last).toFixed(2)}\n
@@ -31,12 +33,21 @@ export default function PostScreen() {
 	}
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.text}>
-				{cryptoData}
-			</Text>
-			<Button onPress={criptoprice} title="get cripto" />
-		</View>
+			
+			<View style={styles.backgroundWrapper}>
+				<ImageBackground
+					source={ require("../assets/3px-tile-520x260.png")}
+					style={styles.backgroundImage}
+					resizeMode="repeat"
+				>
+					<View style={styles.container}>
+						<Text style={styles.text}>
+							{cryptoData}
+						</Text>
+						<Button onPress={criptoprice} title="get cripto" />
+					</View>
+				</ImageBackground>
+			</View>
 	);
 }
 
@@ -47,8 +58,17 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	text: {
-		fontSize: 30,
+		fontSize: 20,
 		fontWeight: "900",
 		// fontFamily: "",
 	},
+	backgroundWrapper: {
+		position: 'absolute',
+		width: width,
+		height: height,
+	  },
+	  backgroundImage: {
+		width: '100%',
+		height: '100%',
+	  },
 });

@@ -7,10 +7,11 @@ import Form from "../components/Form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
 
-export default function HomeScreen({ route }) {
+export default function HomeScreen({ route, navigation  }) {
 	let keyboardStatus = false;
 	let donetodo = 0;
-
+	console.log("HomeScreen -> route.params", route.params);
+	// const { handleUpdateData } = route.params;
 
 	if (route.params && route.params.keyboardStatus !== undefined) {
 		keyboardStatus = route.params.keyboardStatus;
@@ -25,7 +26,14 @@ export default function HomeScreen({ route }) {
 	]);
 
 	listtodos.forEach((el) => el.checked ? ++donetodo : null);
+	let notdonetodo = listtodos.length-donetodo;
+	
+
 	console.log("HomeScreen -> donetodo", donetodo);
+	useEffect(() => {
+		 navigation.setOptions({ tabBarBadge: notdonetodo || null });
+		// handleUpdateData(notdonetodo);
+	}, [listtodos]);
 
 	const widthAnim = useSharedValue(`${((donetodo / listtodos.length) || 0) * 100}%`);
 	widthAnim.value = withSpring(`${((donetodo / listtodos.length) || 0) * 100}%`, { stiffness: 500, damping: 20 });
