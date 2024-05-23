@@ -1,24 +1,40 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
+import React, { useState, useRef } from "react";
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import Animated, {
+    useSharedValue,
+    withSpring,
+    withDelay,
+    useAnimatedStyle,
+} from "react-native-reanimated";
 
-export default function List({ element, deleteElement, toggleCheckbox }) {
-    const [marginLeftValue,setMarginLeftValue] =useState(element?.checked?-20:-33);
-    const [showChecIcon, setShowChecIcon] = useState(element?.checked?false:true);
+export default function List({
+    element,
+    deleteElement,
+    toggleCheckbox,
+    saveTodo,
+}) {
+    const [marginLeftValue, setMarginLeftValue] = useState(
+        element?.checked ? -20 : -33
+    );
+    const [showChecIcon, setShowChecIcon] = useState(
+        element?.checked ? false : true
+    );
     const [showDeleteIcon, setShowDeleteIcon] = useState(false);
     const timerRef = useRef(null);
 
     const slideAnim = useSharedValue("5%");
     const opacityAnim = useSharedValue(0);
 
-    const ChecboxAction = ({ onPress }) => (<Ionicons
-        name="checkbox-outline"
-        size={46}
-        color="#6b9e23"
-        style={styles.icon}
-        onPress={onPress}
-    />);
+    const ChecboxAction = ({ onPress }) => (
+        <Ionicons
+            name="checkbox-outline"
+            size={46}
+            color="#6b9e23"
+            style={styles.icon}
+            onPress={onPress}
+        />
+    );
     const clickChecboxAction = () => {
         setShowChecIcon(false);
         setMarginLeftValue(-20);
@@ -26,28 +42,39 @@ export default function List({ element, deleteElement, toggleCheckbox }) {
         slideAnim.value = withSpring("5%", { stiffness: 500, damping: 20 });
         opacityAnim.value = withSpring(0, { stiffness: 100 });
         toggleCheckbox(element.key); // Вызываем функцию toggleCheckbox с ключом элемента
-    }
+    };
 
     const toggleDeleteIcon = () => {
         setShowDeleteIcon((prev) => !prev);
-        slideAnim.value = withSpring(showDeleteIcon ? "5%" : marginLeftValue, { stiffness: showDeleteIcon ? 300 : 200 , damping: showDeleteIcon ? 10 : 18});
-        opacityAnim.value = withSpring(showDeleteIcon ? 0 : 1, { stiffness: showDeleteIcon ? 100 : 20 });
+        slideAnim.value = withSpring(showDeleteIcon ? "5%" : marginLeftValue, {
+            stiffness: showDeleteIcon ? 300 : 200,
+            damping: showDeleteIcon ? 10 : 18,
+        });
+        opacityAnim.value = withSpring(showDeleteIcon ? 0 : 1, {
+            stiffness: showDeleteIcon ? 100 : 20,
+        });
         if (!showDeleteIcon) {
             timerRef.current = setTimeout(() => {
                 setShowDeleteIcon(false);
                 slideAnim.value = withSpring("5%", { stiffness: 500, damping: 20 });
                 opacityAnim.value = withSpring(0, { stiffness: 100 });
             }, 5000);
-            console.log('timer.current: -> ', timerRef.current);
+            console.log("timer.current: -> ", timerRef.current);
         } else {
-            console.log('timer.current: -> ', timerRef.current);
+            console.log("timer.current: -> ", timerRef.current);
             clearTimeout(timerRef.current);
         }
     };
 
+    const clickSaveTodo = () => {
+        slideAnim.value = withDelay(1000, withSpring("5%", { stiffness: 500, damping: 10, mass:1 }) );
+        opacityAnim.value = withSpring(0, { stiffness: 100 });
+        saveTodo(element.key);
+    };
+
     const slideStyle = useAnimatedStyle(() => {
         return {
-            marginLeft: slideAnim.value
+            marginLeft: slideAnim.value,
         };
     });
 
@@ -60,17 +87,19 @@ export default function List({ element, deleteElement, toggleCheckbox }) {
     return (
         <TouchableWithoutFeedback
             style={styles.container}
-            onPress={toggleDeleteIcon}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            onPress={toggleDeleteIcon}
+        >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Animated.View style={[styles.textContainer, slideStyle]}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
                         {showChecIcon || (
                             <Ionicons
                                 name="checkbox"
                                 size={26}
                                 color="#6b9e23"
                                 style={{
-                                    marginRight: 10, marginTop: 10
+                                    marginRight: 10,
+                                    marginTop: 10,
                                 }}
                             />
                         )}
@@ -78,13 +107,14 @@ export default function List({ element, deleteElement, toggleCheckbox }) {
                     </View>
                 </Animated.View>
                 <Animated.View
-                    style={[{ flexDirection: 'row', alignItems: 'center' }, iconStyle]}>
+                    style={[{ flexDirection: "row", alignItems: "center" }, iconStyle]}
+                >
                     <Ionicons
                         name="chevron-back-circle-outline"
                         size={46}
                         color="gray"
                         style={styles.icon}
-                        onPress={() => { }}
+                        onPress={clickSaveTodo}
                     />
                     {showChecIcon && <ChecboxAction onPress={clickChecboxAction} />}
                     <Ionicons
@@ -104,10 +134,10 @@ const styles = StyleSheet.create({
     container: {
         padding: 10,
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderBottomColor: "#ccc",
     },
     textContainer: {
-        width: '90%',
+        width: "90%",
     },
     todotext: {
         padding: 8,
@@ -117,10 +147,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         marginTop: 10,
-        fontSize: 22
+        fontSize: 22,
     },
     icon: {
         marginLeft: 6,
-        marginTop: 10
-    }
+        marginTop: 10,
+    },
 });

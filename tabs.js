@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect } from "react";
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import SavedScreen from "./screens/SavedScreen";
 import HomeScreen from "./screens/HomeScreen";
-import PostScreen from "./screens/PostScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
 export default function Tabs({ keyboardStatus }) {
 	const navigation = useNavigation(); // Инициализируем хук useNavigation
-	const [notdonetodo, setNotDoneTodo] = useState(0);
-
-	// const handleUpdateData = (newnotdonetodo) => {
-	// 	setNotDoneTodo(newnotdonetodo);
-	//   };
 
 	useEffect(() => {
 		navigation.setParams({ keyboardStatus }); // Передаем параметр keyboardStatus через навигацию
@@ -38,9 +32,9 @@ export default function Tabs({ keyboardStatus }) {
 					if (route.name === "Home") {
 						iconName = focused ? "home" : "home-outline";
 						focused ? (size = 30) : (size = 25);
-					} else if (route.name === "Post") {
+					} else if (route.name === "Save") {
 						iconName = focused ? "balloon" : "balloon-outline";
-					} else if (route.name === "Settings") {
+					} else if (route.name === "Graf") {
 						iconName = focused ? "calendar" : "calendar-outline";
 					// } else if (route.name === "Settings") {
 					// 	iconName = focused ? "settings" : "settings-outline";
@@ -71,11 +65,11 @@ export default function Tabs({ keyboardStatus }) {
 			})}
 		>
 			<Tab.Screen
-				name="Post"
-				component={PostScreen}
+				name="Save"
+				component={SavedScreen}
 				options={{
 					// title: "настрійки))",
-					// headerShown: false,
+					headerShown: false,
 					// headerStyle: {
 					// 	backgroundColor: "lightblue",
 					// 	borderTopWidth: 3,
@@ -91,12 +85,11 @@ export default function Tabs({ keyboardStatus }) {
 					tabBarShowLabel: true,
 					tabBarHideOnKeyboard: true,
 					headerShown: false,
-					// tabBarBadge: notdonetodo,
 				}}
 			/>
 
 			<Tab.Screen
-				name="Settings"
+				name="Graf"
 				component={SettingsScreen}
 				options={{
 					title: "График =================",

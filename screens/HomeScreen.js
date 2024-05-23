@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, SafeAreaView, FlatList } from "react-native";
 import Header from "../components/Header";
-import List from '../components/List';
+import List from "../components/List";
 import Form from "../components/Form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
+import Animated, {
+	useSharedValue,
+	withSpring,
+	useAnimatedStyle,
+} from "react-native-reanimated";
 
-export default function HomeScreen({ route, navigation  }) {
+export default function HomeScreen({ route, navigation }) {
 	let keyboardStatus = false;
 	let donetodo = 0;
 	console.log("HomeScreen -> route.params", route.params);
@@ -25,18 +29,22 @@ export default function HomeScreen({ route, navigation  }) {
 		},
 	]);
 
-	listtodos.forEach((el) => el.checked ? ++donetodo : null);
-	let notdonetodo = listtodos.length-donetodo;
-	
+	listtodos.forEach((el) => (el.checked ? ++donetodo : null));
+	let notdonetodo = listtodos.length - donetodo;
 
 	console.log("HomeScreen -> donetodo", donetodo);
 	useEffect(() => {
-		 navigation.setOptions({ tabBarBadge: notdonetodo || null });
+		navigation.setOptions({ tabBarBadge: notdonetodo || null });
 		// handleUpdateData(notdonetodo);
 	}, [listtodos]);
 
-	const widthAnim = useSharedValue(`${((donetodo / listtodos.length) || 0) * 100}%`);
-	widthAnim.value = withSpring(`${((donetodo / listtodos.length) || 0) * 100}%`, { stiffness: 500, damping: 20 });
+	const widthAnim = useSharedValue(
+		`${(donetodo / listtodos.length || 0) * 100}%`
+	);
+	widthAnim.value = withSpring(`${(donetodo / listtodos.length || 0) * 100}%`, {
+		stiffness: 500,
+		damping: 20,
+	});
 
 	useEffect(() => {
 		AsyncStorage.getItem("myKey")
@@ -90,9 +98,28 @@ export default function HomeScreen({ route, navigation  }) {
 		}
 	};
 
+	const saveTodo = async (key) => {
+		try {
+			const value = await AsyncStorage.getItem("myKey");
+			const existingValue = await AsyncStorage.getItem("saved_todo");			
+			if (value !== null) {
+				let jsonValue = JSON.parse(value);
+				let element = jsonValue.find((el) => el.key == key);
+				
+				let updatedValue = JSON.parse(existingValue);
+				updatedValue.push(element);
+				updatedValue = JSON.stringify(updatedValue);
+
+				await AsyncStorage.setItem("saved_todo", updatedValue);
+			}
+		} catch (e) {
+			console.error(e);
+		}
+	};
+
 	const widthStyle = useAnimatedStyle(() => {
 		return {
-			width: widthAnim.value
+			width: widthAnim.value,
 		};
 	});
 
@@ -112,23 +139,43 @@ export default function HomeScreen({ route, navigation  }) {
 			<Header listlen={listtodos.length} donetodo={donetodo} />
 
 			<View style={[styles.body, { marginBottom: keyboardStatus ? 2 : 100 }]}>
-
-				<View style={{ flexDirection: "row", justifyContent: "left", }}>
+				<View style={{ flexDirection: "row", justifyContent: "left" }}>
 					<Animated.View style={[widthStyle]}>
-						<View style={[styles.progress, { /*width: `${(donetodo / listtodos.length) * 100}%`,*/ backgroundColor: `rgba(${255 - (donetodo / listtodos.length) * 148},${(donetodo / listtodos.length) * 158},34,.9)`, },]} >
-						</View>
+						<View
+							style={[
+								styles.progress,
+								{
+                  /*width: `${(donetodo / listtodos.length) * 100}%`,*/ backgroundColor: `rgba(${255 - (donetodo / listtodos.length) * 148
+										},${(donetodo / listtodos.length) * 158},34,.9)`,
+								},
+							]}
+						></View>
 					</Animated.View>
-					<View style={{ width: 10, height: 10, backgroundColor: "#e24", borderRadius: 5, zIndex: 1000, overflow: "visible", top: -4 }}></View>
+					<View
+						style={{
+							width: 10,
+							height: 10,
+							backgroundColor: "#e24",
+							borderRadius: 5,
+							zIndex: 1000,
+							overflow: "visible",
+							top: -4,
+						}}
+					></View>
 				</View>
 
+				<FlatList
+					data={listtodos}
+					renderItem={({ item }) => (
+						<List
+							element={item}
+							deleteElement={deleteElement}
+							toggleCheckbox={toggleCheckbox}
+							saveTodo={saveTodo}
+						/>
+					)}
+				/>
 				<Form addTask={addTask} />
-				<FlatList data={listtodos} renderItem={({ item }) =>
-					<List
-						element={item}
-						deleteElement={deleteElement}
-						toggleCheckbox={toggleCheckbox} // Передаем функцию toggleCheckbox в компонент List
-					/>
-				} />
 			</View>
 		</SafeAreaView>
 	);

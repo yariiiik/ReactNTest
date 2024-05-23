@@ -14,18 +14,18 @@ export default function Form({ addTask }) {
     };
 
     return (
-        <View>
+        <View style={{borderTopWidth:3,borderColor:"#ddd",padding:0,}}>
             <TextInput
                 style={styles.input}
                 onChangeText={onChange}
                 placeholder="Write your task"
                 placeholderTextColor="gray"
-                multiline maxLength={80}
+                multiline maxLength={100}
                 numberOfLines={2}
                 value={textinput}
             />
             <View style={styles.buttoneround}>
-                <Button onPress={handlePress} title="Save" />
+                <Button onPress={handlePress} title="Save" color="skyblue"/>
             </View>
         </View>
     );
@@ -38,10 +38,13 @@ const styles = StyleSheet.create({
         width: "80%",
         marginHorizontal: "10%",
         fontSize: 20,
+        padding: 0,
+        
     },
     buttoneround: {
         width: "50%",
         marginHorizontal: "25%",
         paddingVertical: 10,
+        
     }
 });

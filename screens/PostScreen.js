@@ -38,13 +38,14 @@ export default function PostScreen() {
 				<ImageBackground
 					source={ require("../assets/3px-tile-520x260.png")}
 					style={styles.backgroundImage}
-					resizeMode="repeat"
-				>
+					resizeMode="repeat">
+					
+
 					<View style={styles.container}>
 						<Text style={styles.text}>
 							{cryptoData}
 						</Text>
-						<Button onPress={criptoprice} title="get cripto" />
+						<Button  onPress={criptoprice} title="get cripto" />
 					</View>
 				</ImageBackground>
 			</View>
