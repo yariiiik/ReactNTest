@@ -9,13 +9,14 @@ const DateItem = ({ item }) => {
 		todayDay < 10 && (todayDay = '0' + todayDay)
 		let todayMonth = today.getMonth() + 1;
 		todayMonth < 10 && (todayMonth = '0' + todayMonth)
-		return { todayDay, todayMonth };
+		let todayYear = today.getFullYear()-2000;
+		return { todayDay, todayMonth, todayYear };
 	}
 
-	console.log("🚀 ~ DateItem ~ item:", item)
-	const { todayDay, todayMonth } = getTodayDate();
+	// console.log("🚀 ~ DateItem ~ item:", item)
+	const { todayDay, todayMonth, todayYear} = getTodayDate();
 
-	let catchToday = item.day === `${todayDay}.${todayMonth}`;
+	let catchToday = (item.day == `${todayDay}.${todayMonth}`)||(item.day == `${todayDay}.${todayMonth}.${todayYear}`);
 	let st;
 	return (
 		<View style={catchToday ? styles.rowToday : styles.row}>

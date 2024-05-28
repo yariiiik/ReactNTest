@@ -1,30 +1,17 @@
 import React, { useState, useRef } from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, {
-    useSharedValue,
-    withSpring,
-    withDelay,
-    useAnimatedStyle,
-} from "react-native-reanimated";
+import Animated, { useSharedValue, withSpring, withDelay, useAnimatedStyle, withSequence } from "react-native-reanimated";
 
-export default function List({
-    element,
-    deleteElement,
-    toggleCheckbox,
-    saveTodo,
-}) {
-    const [marginLeftValue, setMarginLeftValue] = useState(
-        element?.checked ? -20 : -33
-    );
-    const [showChecIcon, setShowChecIcon] = useState(
-        element?.checked ? false : true
-    );
+export default function List({ element, deleteElement, toggleCheckbox, saveTodo, }) {
+    const [marginLeftValue, setMarginLeftValue] = useState(element?.checked ? -20 : -33);
+    const [showChecIcon, setShowChecIcon] = useState(element?.checked ? false : true);
     const [showDeleteIcon, setShowDeleteIcon] = useState(false);
     const timerRef = useRef(null);
 
     const slideAnim = useSharedValue("5%");
     const opacityAnim = useSharedValue(0);
+    const translateX = useSharedValue(0);
 
     const ChecboxAction = ({ onPress }) => (
         <Ionicons
@@ -41,7 +28,7 @@ export default function List({
         setShowDeleteIcon(false);
         slideAnim.value = withSpring("5%", { stiffness: 500, damping: 20 });
         opacityAnim.value = withSpring(0, { stiffness: 100 });
-        toggleCheckbox(element.key); // Вызываем функцию toggleCheckbox с ключом элемента
+        toggleCheckbox(element.key, false); // Вызываем функцию toggleCheckbox с ключом элемента
     };
 
     const toggleDeleteIcon = () => {
@@ -67,9 +54,10 @@ export default function List({
     };
 
     const clickSaveTodo = () => {
-        slideAnim.value = withDelay(1000, withSpring("5%", { stiffness: 500, damping: 10, mass:1 }) );
+        slideAnim.value = withDelay(300, withSpring("5%", { stiffness: 500, damping: 20}) );
         opacityAnim.value = withSpring(0, { stiffness: 100 });
-        saveTodo(element.key);
+        translateX.value = withSequence(withSpring(-300, { stiffness: 200, damping: 100 }), withDelay(600,withSpring(0, { stiffness: 1000, damping: 10, mass:.2 })));
+        toggleCheckbox(element.key, true);
     };
 
     const slideStyle = useAnimatedStyle(() => {
@@ -84,12 +72,15 @@ export default function List({
         };
     });
 
+    const translateStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ translateX: translateX.value }],
+        };
+    });
+
     return (
-        <TouchableWithoutFeedback
-            style={styles.container}
-            onPress={toggleDeleteIcon}
-        >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <TouchableWithoutFeedback onPress={toggleDeleteIcon}>
+            <View style={styles.container}>
                 <Animated.View style={[styles.textContainer, slideStyle]}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         {showChecIcon || (
@@ -106,16 +97,16 @@ export default function List({
                         <Text style={styles.todotext}>{element.text}</Text>
                     </View>
                 </Animated.View>
-                <Animated.View
-                    style={[{ flexDirection: "row", alignItems: "center" }, iconStyle]}
-                >
-                    <Ionicons
-                        name="chevron-back-circle-outline"
-                        size={46}
-                        color="gray"
-                        style={styles.icon}
-                        onPress={clickSaveTodo}
-                    />
+                <Animated.View style={[{ flexDirection: "row", alignItems: "center" }, iconStyle]} >
+                    <Animated.View style={translateStyle}>
+                        <Ionicons
+                            name={element.save ? "save" : "save-outline"}
+                            size={42}
+                            color={element.save ? "gray" : "blue"}
+                            style={styles.icon}
+                            onPress={element.save ? () => alert("This todo has already been saved") : clickSaveTodo}
+                        />
+                    </Animated.View>
                     {showChecIcon && <ChecboxAction onPress={clickChecboxAction} />}
                     <Ionicons
                         name="close-circle-outline"
@@ -132,9 +123,11 @@ export default function List({
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
+        flexDirection: "row", 
+        alignItems: "center",
+        padding: 0,
+        borderWidth: 0,
+        borderColor: "#c00",
     },
     textContainer: {
         width: "90%",
@@ -145,9 +138,10 @@ const styles = StyleSheet.create({
         textAlign: "left",
         backgroundColor: "#fdf5e6",
         borderWidth: 1,
+        borderColor:"#999",
         borderRadius: 5,
         marginTop: 10,
-        fontSize: 22,
+        fontSize: 20,
     },
     icon: {
         marginLeft: 6,

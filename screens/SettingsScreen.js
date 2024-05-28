@@ -43,10 +43,10 @@ export default function SettingsScreen() {
     }
     if (savedWMYcount.WMY == "W") {
       const currentDay = (UD.getDay() == 0) ? 6 : (UD.getDay() - 1);
-      console.log("🚀 ~ getUserDate ~ currentDay:", currentDay)
+      // console.log("🚀 ~ getUserDate ~ currentDay:", currentDay)
       UD.setDate(UD.getDate() - currentDay + (savedWMYcount.count * 7));
-      UDStart = new Date(UD);	// = new Date(UD.getFullYear(), UD.getMonth(), UD.getDate())
-      UDEnd = new Date(UDStart.getFullYear(), UDStart.getMonth(), UDStart.getDate() + 6, 23, 59, 59);
+      UDStart = new Date(UD.getFullYear(), UD.getMonth(), UD.getDate()); // =new Date(UD);
+      UDEnd = new Date(UDStart.getFullYear(), UDStart.getMonth(), UDStart.getDate() + 6);
     }
     if (savedWMYcount.WMY == "Y") {
       UD.setFullYear(UD.getFullYear() + savedWMYcount.count);
@@ -55,6 +55,7 @@ export default function SettingsScreen() {
     }
 
     let UDStartDayOfYear = Math.round((UDStart - new Date(UD.getFullYear(), 0, 1)) / (24 * 60 * 60 * 1000));
+    // savedWMYcount.WMY == "W"?UDStartDayOfYear-=1:null;
 
     setShowInterval(UDStart.toLocaleDateString() + "  -  " + UDEnd.toLocaleDateString())
     return { UDStart, UDEnd, UDStartDayOfYear }
@@ -164,13 +165,13 @@ export default function SettingsScreen() {
                 <View style={{ flexDirection: "row" }}>
 
                   <GlassmorphismButton title={"Week"} onPress={
-                    savedWMYcount.WMY == "W" ? null : () => setSavedWMYcount(current => ({ WMY: "W", count: 0 }))} MyStyle={savedWMYcount.WMY == "W" ? { fontSize: 22, color: '#900', opacity: 0.2, } : null} />
+                    savedWMYcount.WMY == "W" ? null : () => setSavedWMYcount(current => ({ WMY: "W", count: 0 }))} MyStyle={savedWMYcount.WMY == "W" ? { fontSize: 22, color: '#900', opacity: 0.2, } : { fontSize: 28 }} />
                   <View style={{ marginHorizontal: 5 }} />
                   <GlassmorphismButton title={"Month"} onPress={
-                    savedWMYcount.WMY == "M" ? null : () => setSavedWMYcount(current => ({ WMY: "M", count: 0 }))} MyStyle={savedWMYcount.WMY == "M" ? { fontSize: 22, color: '#900', opacity: 0.2, } : { fontSize: 24 }} />
+                    savedWMYcount.WMY == "M" ? null : () => setSavedWMYcount(current => ({ WMY: "M", count: 0 }))} MyStyle={savedWMYcount.WMY == "M" ? { fontSize: 22, color: '#900', opacity: 0.2, } : { fontSize: 28 }} />
                   <View style={{ marginHorizontal: 5 }} />
                   <GlassmorphismButton title={"Year"} onPress={
-                    savedWMYcount.WMY == "Y" ? null : () => setSavedWMYcount(current => ({ WMY: "Y", count: 0 }))} MyStyle={savedWMYcount.WMY == "Y" ? { fontSize: 22, color: '#900', opacity: 0.2, } : { fontSize: 24 }} />
+                    savedWMYcount.WMY == "Y" ? null : () => setSavedWMYcount(current => ({ WMY: "Y", count: 0 }))} MyStyle={savedWMYcount.WMY == "Y" ? { fontSize: 22, color: '#900', opacity: 0.2, } : { fontSize: 28 }} />
                 </View>
 
                 <NeumorphicButton title={showInterval} MyStyle={{ fontSize: 20 }} />
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 5,
     elevation: 10,
-    backgroundColor: '#51b6F3',
+    backgroundColor: 'skyblue',
   },
   buttonDisable: {
     opacity: 0.3

@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons,MaterialCommunityIcons } from "@expo/vector-icons";
 import SavedScreen from "./screens/SavedScreen";
-import HomeScreen from "./screens/HomeScreen";
+import ToDoScreen from "./screens/ToDoScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
@@ -13,6 +13,10 @@ export default function Tabs({ keyboardStatus }) {
 	const navigation = useNavigation(); // Инициализируем хук useNavigation
 
 	useEffect(() => {
+		({ route }) => {
+		    console.log("🚀 ~ useEffect ~ route:", route)
+		    return 
+		}
 		navigation.setParams({ keyboardStatus }); // Передаем параметр keyboardStatus через навигацию
 	}, [keyboardStatus]);
 
@@ -33,9 +37,11 @@ export default function Tabs({ keyboardStatus }) {
 						iconName = focused ? "home" : "home-outline";
 						focused ? (size = 30) : (size = 25);
 					} else if (route.name === "Save") {
-						iconName = focused ? "balloon" : "balloon-outline";
+						iconName = focused ? "content-save-all" : "content-save-all-outline";
+						return <MaterialCommunityIcons name={iconName} size={28} color={color} />;
 					} else if (route.name === "Graf") {
 						iconName = focused ? "calendar" : "calendar-outline";
+						size=28;
 					// } else if (route.name === "Settings") {
 					// 	iconName = focused ? "settings" : "settings-outline";
 					}
@@ -46,7 +52,7 @@ export default function Tabs({ keyboardStatus }) {
 				tabBarLabel: ({ color }) => {
 					if (route.name === "Home") {
 						return (
-							<Text style={{ fontSize: 14, color, bottom: 10 }}>To-do</Text>
+							<Text style={{ fontSize: 14, color, bottom: 10 }}>To Do</Text>
 						);
 					}
 					return null; // Скрыть метку для всех вкладок, кроме Home
@@ -79,7 +85,7 @@ export default function Tabs({ keyboardStatus }) {
 			/>
 			<Tab.Screen
 				name="Home"
-				component={HomeScreen}
+				component={ToDoScreen}
 				// initialParams={{ handleUpdateData }}
 				options={{
 					tabBarShowLabel: true,
@@ -92,7 +98,7 @@ export default function Tabs({ keyboardStatus }) {
 				name="Graf"
 				component={SettingsScreen}
 				options={{
-					title: "График =================",
+					// title: "График =================",
 					headerShown: false,
 					headerStyle: {
 						height:40,

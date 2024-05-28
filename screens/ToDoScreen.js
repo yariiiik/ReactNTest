@@ -1,42 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, SafeAreaView, FlatList } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, FlatList } from "react-native";
 import Header from "../components/Header";
 import List from "../components/List";
 import Form from "../components/Form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Animated, {
-	useSharedValue,
-	withSpring,
-	useAnimatedStyle,
-} from "react-native-reanimated";
+import Animated, { useSharedValue, withSpring, useAnimatedStyle, } from "react-native-reanimated";
+import { useFocusEffect } from '@react-navigation/native';
 
-export default function HomeScreen({ route, navigation }) {
-	let keyboardStatus = false;
-	let donetodo = 0;
-	console.log("HomeScreen -> route.params", route.params);
-	// const { handleUpdateData } = route.params;
-
-	if (route.params && route.params.keyboardStatus !== undefined) {
-		keyboardStatus = route.params.keyboardStatus;
-	}
-
+export default function ToDoScreen({ route, navigation }) {
+	// console.log("🚀 ~ ToDoScreen ~ navigation:", navigation.getState().routes)
+	// console.log("ToDoScreen -> route.params", route.params);
+	const [refreshCount, setRefreshCount] = useState(0);
+	const [listener, setListener] = useState("");
 	const [listtodos, setListtodos] = useState([
 		{
 			text: "Создать первое напоминание)",
 			key: "" + Date.now(),
 			checked: false,
+			save: false,
 		},
 	]);
+	let keyboardStatus = route.params?.keyboardStatus || false;
+	let donetodo = 0;
+	console.log("🚀 🚀  ~ ToDoScreen ~ listener:", listtodos)
+
+	useEffect(() => {
+		// Устанавливаем колбэк в параметры маршрута
+		navigation.setParams({refreshCount, refreshCallback: () => setRefreshCount(prev => prev + 1) });
+	}, [navigation]);
 
 	listtodos.forEach((el) => (el.checked ? ++donetodo : null));
 	let notdonetodo = listtodos.length - donetodo;
-
-	console.log("HomeScreen -> donetodo", donetodo);
-	useEffect(() => {
-		navigation.setOptions({ tabBarBadge: notdonetodo || null });
-		// handleUpdateData(notdonetodo);
-	}, [listtodos]);
+	useEffect(() => {navigation.setOptions({ tabBarBadge: notdonetodo || null })}, [listtodos]);
 
 	const widthAnim = useSharedValue(
 		`${(donetodo / listtodos.length || 0) * 100}%`
@@ -46,6 +42,18 @@ export default function HomeScreen({ route, navigation }) {
 		damping: 20,
 	});
 
+	useFocusEffect(
+		useCallback(() => {
+			AsyncStorage.getItem("trigger")
+				.then((value) => {
+					console.log("🚀 ~ ToDoScreen ~ 🚀 trigger:", value)
+					if (value !== null) { setListener(value) }
+					else { AsyncStorage.setItem("trigger", Date.now() + "") }
+				})
+				.catch((error) => console.log(error))
+		}, [])
+	);
+
 	useEffect(() => {
 		AsyncStorage.getItem("myKey")
 			.then((value) => {
@@ -54,15 +62,16 @@ export default function HomeScreen({ route, navigation }) {
 				}
 			})
 			.catch((error) => console.log(error));
-	}, []);
+	}, [refreshCount,listener]);
 
 	const addTask = (inptext) => {
 		setListtodos((prevListtodos) => {
 			const newListtodos = [
-				{ text: inptext, key: "" + Date.now(), checked: false },
+				{ text: inptext, key: "" + Date.now(), checked: false, save: false },
 				...prevListtodos,
 			];
 			saveData(newListtodos); // Вызываем saveData с новым списком задач
+			trigger(Date.now());
 			return newListtodos;
 		});
 	};
@@ -71,15 +80,20 @@ export default function HomeScreen({ route, navigation }) {
 		setListtodos((prevListtodos) => {
 			const newListtodos = prevListtodos.filter((item) => item.key != key);
 			saveData(newListtodos);
+			trigger(Date.now());
 			return newListtodos;
 		});
 	};
 
-	const toggleCheckbox = (key) => {
+	const toggleCheckbox = (key, save) => {
 		setListtodos((prevListtodos) => {
 			const newListtodos = prevListtodos.map((item) => {
-				if (item.key === key) {
-					item.checked = !item.checked; // Изменяем состояние checked
+				if (item.key === key) {// Изменяем состояние save или checked
+					if (save) {
+						item.save = !item.save;
+						saveTodo(item)
+					} else { item.checked = !item.checked }
+
 				}
 				return item;
 			});
@@ -98,24 +112,29 @@ export default function HomeScreen({ route, navigation }) {
 		}
 	};
 
-	const saveTodo = async (key) => {
+	const saveTodo = async (item) => {
 		try {
-			const value = await AsyncStorage.getItem("myKey");
-			const existingValue = await AsyncStorage.getItem("saved_todo");			
-			if (value !== null) {
-				let jsonValue = JSON.parse(value);
-				let element = jsonValue.find((el) => el.key == key);
-				
-				let updatedValue = JSON.parse(existingValue);
-				updatedValue.push(element);
-				updatedValue = JSON.stringify(updatedValue);
+			const existingValue = await AsyncStorage.getItem("saved_todo");
+			let updatedValue;
+			if (existingValue !== null) {
+				updatedValue = JSON.parse(existingValue);
+				if (updatedValue.some((el) => el.key == item.key)) {
+					alert("This todo has already been saved");
+				} else {
+					item.checked = false;
+					updatedValue.unshift(item);
+					updatedValue = JSON.stringify(updatedValue);
+				}
+			} else { updatedValue = JSON.stringify([item]) }
 
-				await AsyncStorage.setItem("saved_todo", updatedValue);
-			}
+			await AsyncStorage.setItem("saved_todo", updatedValue);
+			trigger(Date.now());
 		} catch (e) {
 			console.error(e);
 		}
 	};
+
+	async function trigger(DateNow) { await AsyncStorage.setItem("trigger", DateNow + ""); }
 
 	const widthStyle = useAnimatedStyle(() => {
 		return {
