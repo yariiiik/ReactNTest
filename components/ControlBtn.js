@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import GlassmorphismButton from "./buttons/GlassmorphismButton";
 import NeumorphicButton from "./buttons/NeumorphicButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -49,9 +49,6 @@ export default ControlBtn = ({ onData }) => {
     </View>
   );
 };
-
-
-
 
 const styles = StyleSheet.create({
   container: {

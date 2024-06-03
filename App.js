@@ -1,7 +1,9 @@
+import 'expo-dev-client';
 import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./tabs";
 import { Keyboard } from "react-native";
+
 
 export default function App() {
 	const [keyboardStatus, setKeyboardStatus] = useState(false);
