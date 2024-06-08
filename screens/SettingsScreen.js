@@ -18,20 +18,20 @@ export default function SettingsScreen() {
   const [smeniNames, setSmeniNames] = useState(["🍑", "🍌", "🍓", "🍒"]);
   const objSmen = { "🍑": 14, "🍌": 0, "🍓": 7, "🍒": 21 };
   // let shifts = [14, 0, 7, 21];
-  let dninedeli = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+  let dninedeli = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   // Инициализируем массив с графиком смен
-  let graf_shifts = ["N", "N", "N", "N", "N", "N", "🍺", "O", "O", "O", "O", "🍺", "R", "R", "R", "🍺", "🍺", "🍺", "O", "O", "O", "🍺", "R", "R", "R", "R", "🍺", "☕️"];
+  let graf_shifts = ["N", "N", "N", "N", "N", "N", "🍺", "E", "E", "E", "E", "🍺", "M", "M", "M", "🍺", "🍺", "🍺", "E", "E", "E", "🍺", "M", "M", "M", "M", "🍺", "☕️"];
 
   // Инициализируем состояние для сохраненного месяца и видимости модального окна
   const [savedWMYcount, setSavedWMYcount] = useState({ WMY: "M", count: 0 });
   const [modalVisible, setModalVisible] = useState(false);
 
   // автопрокрутка к тудэю
-  const flatListRef = useRef(null);
-  const scrollToIndex = (index) => {
-    flatListRef.current?.scrollToIndex({ index, animated: true });
-  };
+  // const flatListRef = useRef(null);
+  // const scrollToIndex = (index) => {
+  //   flatListRef.current?.scrollToIndex({ index, animated: true });
+  // };
 
   // Функция для получения сегодняшней даты
   const getTodayDate = () => {
@@ -43,7 +43,6 @@ export default function SettingsScreen() {
     let todayYear = (today.getFullYear() % 100).toString().padStart(2, "0");
     return { todayDay, todayMonth, todayYear };
   };
-
 
   const handleDataFromChild = (data) => {
     console.log("🚀🚀🚀 ~ handleDataFromChild ~ data:", data);
@@ -143,44 +142,18 @@ export default function SettingsScreen() {
         <ImageBackground
           source={require("../assets/asfalt-dark.png")}
           style={styles.backgroundImage}
-          resizeMode="repeat"
-        >
+          resizeMode="repeat">
           <BannerAd
             unitId={adUnitId}
             size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-            requestOptions={{
-              networkExtras: {
-                collapsible: "bottom",
-              },
-            }}
+            requestOptions={{ networkExtras: { collapsible: "bottom" } }}
           />
 
           <View style={styles.container}>
             {/* ----------------- кнопки управления слева ------------------------*/}
             <View style={styles.settings}>
-              {savedWMYcount.count ? (
-                <View
-                  style={{
-                    height: "auto",
-                    borderWidth: 0,
-                    justifyContent: "flex-start",
-                    flexDirection: "column",
-                    flex: 1,
-                    paddingTop: 20,
-                  }}
-                >
-                  <NeumorphicButton
-                    title={
-                      savedWMYcount.WMY +
-                      "\n" +
-                      (savedWMYcount.count > 0
-                        ? "+" + savedWMYcount.count
-                        : savedWMYcount.count)
-                    }
-                    MyStyle={{ fontSize: 20 }}
-                  />
-                </View>
-              ) : null}
+              {savedWMYcount.count ? (<View style={styles.countviever}>
+                <NeumorphicButton title={savedWMYcount.WMY + "\n" + (savedWMYcount.count > 0 ? "+" + savedWMYcount.count : savedWMYcount.count)} MyStyle={{ fontSize: 20 }} /></View>) : null}
               <ControlBtn onData={handleDataFromChild} />
 
               <Pressable
@@ -210,13 +183,13 @@ export default function SettingsScreen() {
 
                 <FlatList
                   data={createMassDate}
-                  ref={flatListRef}
+                  // ref={flatListRef}
                   renderItem={({ item }) => (
-                    <DateItem item={item}/>
+                    <DateItem item={item} />
                   )}
                   keyExtractor={(item, index) => index.toString()}
                   removeClippedSubviews={false}
-                  // onLayout={scrollToIndex(UDStartDayOfYear)}
+                // onLayout={scrollToIndex(UDStartDayOfYear)}
                 />
               </View>
             </View>
@@ -257,55 +230,20 @@ export default function SettingsScreen() {
                 <View style={{ flexDirection: "row" }}>
                   <GlassmorphismButton
                     title={"Week"}
-                    onPress={
-                      savedWMYcount.WMY == "W"
-                        ? null
-                        : () =>
-                          setSavedWMYcount((current) => ({
-                            WMY: "W",
-                            count: 0,
-                          }))
-                    }
-                    MyStyle={
-                      savedWMYcount.WMY == "W"
-                        ? { fontSize: 22, color: "#900", opacity: 0.2 }
-                        : { fontSize: 28 }
-                    }
+                    onPress={savedWMYcount.WMY == "W" ? null : () => setSavedWMYcount((current) => ({ WMY: "W", count: 0, }))}
+                    MyStyle={savedWMYcount.WMY == "W" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }}
                   />
                   <View style={{ marginHorizontal: 5 }} />
                   <GlassmorphismButton
                     title={"Month"}
-                    onPress={
-                      savedWMYcount.WMY == "M"
-                        ? null
-                        : () =>
-                          setSavedWMYcount((current) => ({
-                            WMY: "M",
-                            count: 0,
-                          }))
-                    }
-                    MyStyle={
-                      savedWMYcount.WMY == "M"
-                        ? { fontSize: 22, color: "#900", opacity: 0.2 }
-                        : { fontSize: 28 }
-                    }
+                    onPress={savedWMYcount.WMY == "M" ? null : () => setSavedWMYcount((current) => ({ WMY: "M", count: 0, }))}
+                    MyStyle={savedWMYcount.WMY == "M" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }}
                   />
                   <View style={{ marginHorizontal: 5 }} />
                   <GlassmorphismButton
                     title={"Year"}
-                    onPress={
-                      savedWMYcount.WMY == "Y"
-                        ? null
-                        : () =>
-                          setSavedWMYcount((current) => ({
-                            WMY: "Y",
-                            count: 0,
-                          }))
-                    }
-                    MyStyle={
-                      savedWMYcount.WMY == "Y"
-                        ? { fontSize: 22, color: "#900", opacity: 0.2 }
-                        : { fontSize: 28 }
+                    onPress={savedWMYcount.WMY == "Y" ? null : () => setSavedWMYcount((current) => ({ WMY: "Y", count: 0, }))}
+                    MyStyle={savedWMYcount.WMY == "Y" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }
                     }
                   />
                 </View>
@@ -318,32 +256,17 @@ export default function SettingsScreen() {
                 <View style={{ flexDirection: "row", marginVertical: 15 }}>
                   <GlassmorphismButton
                     title={" 👈 "}
-                    onPress={() =>
-                      setSavedWMYcount((current) => ({
-                        WMY: current.WMY,
-                        count: current.count - 1,
-                      }))
-                    }
+                    onPress={() => setSavedWMYcount((current) => ({WMY: current.WMY, count: current.count - 1}))}
                   />
                   <View style={{ marginHorizontal: 15 }} />
                   <GlassmorphismButton
                     title={" ⚪️ "}
-                    onPress={() =>
-                      setSavedWMYcount((current) => ({
-                        WMY: current.WMY,
-                        count: 0,
-                      }))
-                    }
+                    onPress={() =>setSavedWMYcount((current) => ({WMY: current.WMY,count: 0}))}
                   />
                   <View style={{ marginHorizontal: 15 }} />
                   <GlassmorphismButton
                     title={" 👉 "}
-                    onPress={() =>
-                      setSavedWMYcount((current) => ({
-                        WMY: current.WMY,
-                        count: current.count + 1,
-                      }))
-                    }
+                    onPress={() =>setSavedWMYcount((current) => ({WMY: current.WMY,count: current.count + 1}))}
                   />
                   {/* ➖➕✖️ 🫵 ⚪️✊*/}
                 </View>
@@ -480,6 +403,14 @@ const styles = StyleSheet.create({
   },
   buttonDisable: {
     opacity: 0.3,
+  },
+  countviever: {
+    height: "auto",
+    borderWidth: 0,
+    justifyContent: "flex-start",
+    flexDirection: "column",
+    flex: 1,
+    paddingTop: 20,
   },
 
   backgroundWrapper: {

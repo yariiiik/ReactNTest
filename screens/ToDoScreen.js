@@ -23,7 +23,7 @@ export default function ToDoScreen({ route, navigation }) {
 	]);
 	let keyboardStatus = route.params?.keyboardStatus || false;
 	let donetodo = 0;
-	console.log("🚀 🚀  ~ ToDoScreen ~ listener:", listtodos)
+	console.log("\n🚀 🚀  ~ ToDoScreen ~ listener:", listtodos)
 
 	useEffect(() => {
 		// Устанавливаем колбэк в параметры маршрута
@@ -91,8 +91,9 @@ export default function ToDoScreen({ route, navigation }) {
 				if (item.key === key) {// Изменяем состояние save или checked
 					if (save) {
 						item.save = !item.save;
-						saveTodo(item)
+						saveTodo(item);
 					} else { item.checked = !item.checked }
+					console.log("*************🚀************* ~ newListtodos ~ item:", item)
 
 				}
 				return item;
@@ -103,6 +104,7 @@ export default function ToDoScreen({ route, navigation }) {
 	};
 
 	const saveData = async (newListtodos) => {
+		console.log("\n\n🚀 🚀 🚀 ~ saveData ~ newListtodos:", newListtodos)
 		try {
 			await AsyncStorage.setItem("myKey", JSON.stringify(newListtodos));
 			// console.log('Данные сохранены:\n', newListtodos);
@@ -113,25 +115,29 @@ export default function ToDoScreen({ route, navigation }) {
 	};
 
 	const saveTodo = async (item) => {
+		let newItem= {...item};
+		console.log("\n\n🚀 ~ saveTodo ~ item:", item);
+		console.log("🚀 ~ saveTodo ~ newItem:", newItem);
+
 		try {
 			const existingValue = await AsyncStorage.getItem("saved_todo");
 			let updatedValue;
 			if (existingValue !== null) {
 				updatedValue = JSON.parse(existingValue);
-				if (updatedValue.some((el) => el.key == item.key)) {
+				if (updatedValue.some((el) => el.key == newItem.key)) {
 					alert("This todo has already been saved");
 				} else {
-					item.checked = false;
-					updatedValue.unshift(item);
+					newItem.checked = false;
+					updatedValue.unshift(newItem);
 					updatedValue = JSON.stringify(updatedValue);
 				}
-			} else { updatedValue = JSON.stringify([item]) }
+			} else { updatedValue = JSON.stringify([newItem]) }
 
 			await AsyncStorage.setItem("saved_todo", updatedValue);
 			trigger(Date.now());
 		} catch (e) {
 			console.error(e);
-		}
+		}console.log("\n\n22🚀22 ~ saveTodo ~ item:", item)
 	};
 
 	async function trigger(DateNow) { await AsyncStorage.setItem("trigger", DateNow + ""); }
@@ -150,7 +156,7 @@ export default function ToDoScreen({ route, navigation }) {
 				style={styles.stausba}
 				hidden={false}
 				showHideTransition={"slide"}
-				backgroundColor={"#eee8aa"}
+				backgroundColor={"#EEEEAA"}
 				// currentHeight="50%"
 				translucent={false}
 				networkActivityIndicatorVisible={true}

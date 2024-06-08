@@ -6,7 +6,7 @@ const DateItem = ({ item }) => {
 	return (
 		<View style={item.catchToday ? styles.rowToday : styles.row}>
 			<Text style={item.catchToday ? styles.dateToday : styles.date}>{item.day}</Text>
-			<Text style={(item.weekDay == "Сб" || item.weekDay == "Вс") ? styles.textDenNedV : styles.textDenNed}>{item.weekDay}</Text>
+			<Text style={(item.weekDay == "Sat" || item.weekDay == "Sun") ? styles.textDenNedV : styles.textDenNed}>{item.weekDay}</Text>
 
 			{item.shifts.map((element, index) => {
 				(element == "🍺" || element == "☕️") ? st = styles.text : st = styles["text" + element];
@@ -102,12 +102,12 @@ const styles = StyleSheet.create({
 		backgroundColor: "#888",
 		...allcss,
 	},
-	textO: {
+	textE: {
 		color: "#ee0",
 		backgroundColor: "#8aF",
 		...allcss,
 	},
-	textR: {
+	textM: {
 		color: "#b55",
 		backgroundColor: "#ffc",
 		...allcss,

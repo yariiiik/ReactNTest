@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons,MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import SavedScreen from "./screens/SavedScreen";
 import ToDoScreen from "./screens/ToDoScreen";
 import SettingsScreen from "./screens/SettingsScreen";
@@ -23,25 +23,26 @@ export default function Tabs({ keyboardStatus }) {
 	// console.log("Tabs=keyboardStatus=", keyboardStatus);
 	return (
 		<Tab.Navigator
-			initialRouteName="Home"
+			initialRouteName="Graf"
 			screenOptions={({ route }) => ({
 				// tabBarShowLabel: false,
 				// headerShown:false,
 				headerTitleAlign: "center",
 				tabBarActiveTintColor: "#464",
-
 				tabBarInactiveTintColor: "gray",
 				tabBarIcon: ({ focused, color, size }) => {
 					let iconName;
-					if (route.name === "Home") {
-						iconName = focused ? "home" : "home-outline";
-						focused ? (size = 30) : (size = 25);
+					if (route.name === "ToDo") {
+						// iconName = focused ? "file-document-edit" : "file-document-edit-outline";
+						focused ? (size = 36, iconName = "file-document-edit") : (size = 30, iconName = "file-document-edit-outline");
+						return <MaterialCommunityIcons name={iconName} size={size} color={color}/>;
 					} else if (route.name === "Save") {
-						iconName = focused ? "content-save-all" : "content-save-all-outline";
-						return <MaterialCommunityIcons name={iconName} size={28} color={color} />;
+						// iconName = focused ? "content-save-all" : "content-save-all-outline";
+						focused ? (size = 36, iconName = "content-save-all") : (size = 30, iconName = "content-save-all-outline");
+						return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
 					} else if (route.name === "Graf") {
-						iconName = focused ? "calendar" : "calendar-outline";
-						size=28;
+						// iconName = focused ? "calendar" : "calendar-outline";
+						focused ? (size = 36, iconName = "calendar") : (size = 30, iconName = "calendar-outline");
 					// } else if (route.name === "Settings") {
 					// 	iconName = focused ? "settings" : "settings-outline";
 					}
@@ -50,7 +51,7 @@ export default function Tabs({ keyboardStatus }) {
 				},
 
 				tabBarLabel: ({ color }) => {
-					if (route.name === "Home") {
+					if (route.name === "ToDo") {
 						return (
 							<Text style={{ fontSize: 14, color, bottom: 10 }}>To Do</Text>
 						);
@@ -70,30 +71,7 @@ export default function Tabs({ keyboardStatus }) {
 				},
 			})}
 		>
-			<Tab.Screen
-				name="Save"
-				component={SavedScreen}
-				options={{
-					// title: "настрійки))",
-					headerShown: false,
-					// headerStyle: {
-					// 	backgroundColor: "lightblue",
-					// 	borderTopWidth: 3,
-					// 	borderColor: "#000000",
-					// },
-				}}
-			/>
-			<Tab.Screen
-				name="Home"
-				component={ToDoScreen}
-				// initialParams={{ handleUpdateData }}
-				options={{
-					tabBarShowLabel: true,
-					tabBarHideOnKeyboard: true,
-					headerShown: false,
-				}}
-			/>
-
+						
 			<Tab.Screen
 				name="Graf"
 				component={SettingsScreen}
@@ -108,6 +86,32 @@ export default function Tabs({ keyboardStatus }) {
 					},
 				}}
 			/>
+
+			<Tab.Screen
+				name="ToDo"
+				component={ToDoScreen}
+				// initialParams={{ handleUpdateData }}
+				options={{
+					tabBarShowLabel: true,
+					tabBarHideOnKeyboard: true,
+					headerShown: false,
+				}}
+			/>
+
+			<Tab.Screen
+				name="Save"
+				component={SavedScreen}
+				options={{
+					// title: "настрійки))",
+					headerShown: false,
+					// headerStyle: {
+					// 	backgroundColor: "lightblue",
+					// 	borderTopWidth: 3,
+					// 	borderColor: "#000000",
+					// },
+				}}
+			/>
+
 		</Tab.Navigator>
 	);
 }

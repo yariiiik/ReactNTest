@@ -8,9 +8,9 @@ export default function SavedList({ element, deleteElement, sendToTodo }) {
 
     return (
         <View style={styles.container}>
-            <AntDesign name="delete" size={40} color="lightcoral" style={styles.dellicon} onPress={() => deleteElement(element.key)} />
+            {element.isintodo||<AntDesign name="leftcircleo" size={40} color="#6b9e23" style={styles.sendicon}  onPress={() => sendToTodo(element.key)} />}
             <Text style={styles.todotext}>{element.text}</Text>
-            {element.isintodo||<AntDesign name="rightcircleo" size={40} color="#6b9e23" style={styles.sendicon}  onPress={() => sendToTodo(element.key)} />}
+            <AntDesign name="delete" size={40} color="lightcoral" style={styles.dellicon} onPress={() => deleteElement(element.key)} />
         </View>
     );
 }
