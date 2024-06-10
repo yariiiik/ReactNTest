@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
     main: {
         flex: 0,
         flexDirection: "row",
-        backgroundColor: "#efefde",
+        // backgroundColor: "#efefde",
         alignItems: "left",
         justifyContent: "center",
         width: "100%",
         borderTopWidth: 2, 
-        borderBottomWidth: 2,
-        borderColor:"rgba(100,100,100,0.1)",
+        // borderBottomWidth: 2,
+        borderColor:"rgba(100,100,100,0.3)",
     },
     maintext: {
         textAlign: "center",

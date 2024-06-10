@@ -1,9 +1,9 @@
-import React, { useMemo, useRef, useState } from "react";
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, ScrollView, FlatList, Pressable, Modal, Alert, ImageBackground } from "react-native";
+import React, { useMemo, useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, FlatList, Pressable, Modal, Alert, ImageBackground } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import DateItem from "../components/DateItem";
 import ControlBtn from "../components/ControlBtn";
-import MinimalistButton from "../components/buttons/MinimalistButton";
 import GlassmorphismButton from "../components/buttons/GlassmorphismButton";
 import NeumorphicButton from "../components/buttons/NeumorphicButton";
 import { BannerAd, BannerAdSize, TestIds } from "react-native-google-mobile-ads";
@@ -40,7 +40,7 @@ export default function SettingsScreen() {
     todayDay < 10 && (todayDay = "0" + todayDay);
     let todayMonth = today.getMonth() + 1;
     todayMonth < 10 && (todayMonth = "0" + todayMonth);
-    let todayYear = (today.getFullYear() % 100).toString().padStart(2, "0");
+    let todayYear = today.getFullYear();    
     return { todayDay, todayMonth, todayYear };
   };
 
@@ -94,24 +94,29 @@ export default function SettingsScreen() {
     let UserDate = getUserDate();
     let givenTD = getTodayDate();
     console.log("🚀 ~ createMassDate ~ UserDate:", UserDate);
-    let day, month, weekDay, dateText, catchToday;
+    let day, month, year, weekDay, dateText, catchToday;
 
     let massObjData = [];
     while (UserDate.UDStart <= UserDate.UDEnd) {
       let currentshifts = [];
       day = UserDate.UDStart.getDate();
       month = UserDate.UDStart.getMonth() + 1;
+      year = UserDate.UDStart.getFullYear();
       let weekDayNum = UserDate.UDStart.getDay();
 
       dateText = `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}`;
-      catchToday = (dateText == `${givenTD.todayDay}.${givenTD.todayMonth}`);
+
+      if (year == givenTD.todayYear) { 
+        catchToday = (dateText == `${givenTD.todayDay}.${givenTD.todayMonth}`); 
+      }else { catchToday = false }
+
       if (savedWMYcount.WMY == "Y") {
-        let notFullYear = UserDate.UDStart.getFullYear() % 100;
-        dateText += notFullYear < 10 ? ".0" + notFullYear : "." + notFullYear;
-        catchToday = dateText == `${givenTD.todayDay}.${givenTD.todayMonth}.${givenTD.todayYear}`;
+        let notFullYear = (year % 100);
+        if (notFullYear < 10) { notFullYear = "0" + notFullYear }
+        // let todayYear = (today.getFullYear() % 100).toString().padStart(2, "0");
+        dateText += "." + notFullYear;        
       }
       weekDay = dninedeli.at(weekDayNum == 0 ? 6 : weekDayNum - 1);
-
 
       // weekDayTest = dninedeli.at((UserDate.UDStartDayOfYear % 7) - 1);
       // console.log("🚀 ~ 🚀createMassDate🚀 ~ 🚀weekDayTest: ", weekDayTest)
@@ -129,152 +134,156 @@ export default function SettingsScreen() {
   }, [savedWMYcount, smeniNames]);
 
   return (
-    <SafeAreaView
-      style={{
-        borderWidth: 0,
-        borderColor: "#090",
-        padding: 0,
-        height: "100%",
-        backgroundColor: "#eee",
-      }}
-    >
-      <View style={styles.backgroundWrapper}>
-        <ImageBackground
-          source={require("../assets/asfalt-dark.png")}
-          style={styles.backgroundImage}
-          resizeMode="repeat">
-          <BannerAd
-            unitId={adUnitId}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-            requestOptions={{ networkExtras: { collapsible: "bottom" } }}
-          />
+    <SafeAreaView style={{
+      borderWidth: 0,
+      borderColor: "#090",
+      padding: 0,
+      height: "100%",
+      borderTopWidth: 2,
+      borderColor: "rgba(100,100,100,0.3)",
+      // backgroundColor: "#eee",
+    }}>
+      <StatusBar
+        animated={true}
+        barStyle={"light-content"}
+        style={styles.stausba}
+        hidden={false}
+        showHideTransition={"slide"}
+        backgroundColor={"#EEEEAA"}
+        // currentHeight="50%"
+        translucent={false}
+        networkActivityIndicatorVisible={true}
+      />
 
-          <View style={styles.container}>
-            {/* ----------------- кнопки управления слева ------------------------*/}
-            <View style={styles.settings}>
-              {savedWMYcount.count ? (<View style={styles.countviever}>
-                <NeumorphicButton title={savedWMYcount.WMY + "\n" + (savedWMYcount.count > 0 ? "+" + savedWMYcount.count : savedWMYcount.count)} MyStyle={{ fontSize: 20 }} /></View>) : null}
-              <ControlBtn onData={handleDataFromChild} />
+      <ImageBackground
+        source={require("../assets/asfalt-dark.png")}
+        style={styles.backgroundImage}
+        resizeMode="repeat">
+        {/* <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+          requestOptions={{ networkExtras: { collapsible: "bottom" } }}
+        /> */}
 
-              <Pressable
-                style={{ marginVertical: 30 }}
-                onPress={() => setModalVisible(true)}
-              >
-                <Ionicons
-                  name={modalVisible ? "settings" : "settings-outline"}
-                  size={42}
-                  color="#464"
-                // onPress={() => setModalVisible(true)}
-                />
-              </Pressable>
+        <View style={styles.container}>
+          {/* ----------------- кнопки управления слева ------------------------*/}
+          <View style={styles.settings}>
+            {savedWMYcount.count ? (<View style={styles.countviever}>
+              <NeumorphicButton title={savedWMYcount.WMY + "\n" + (savedWMYcount.count > 0 ? "+" + savedWMYcount.count : savedWMYcount.count)} MyStyle={{ fontSize: 20 }} /></View>) : null}
+            <ControlBtn onData={handleDataFromChild} />
+
+            <Pressable
+              style={{ marginVertical: 30 }}
+              onPress={() => setModalVisible(true)}
+            >
+              <Ionicons
+                name={modalVisible ? "settings" : "settings-outline"}
+                size={42}
+                color="#464"
+              // onPress={() => setModalVisible(true)}
+              />
+            </Pressable>
+          </View>
+          {/* ----------------- END кнопки управления слева ------------------------*/}
+          <View style={styles.shifts}>
+            <View style={{ maxHeight: "100%" }}>
+              <View style={styles.headrow}>
+                <Text style={styles.headD}>Date</Text>
+                <Text style={styles.headW}>Week</Text>
+                {smeniNames.map((el, index) => (
+                  <Text style={styles.headS} key={index}>
+                    {el}
+                  </Text>
+                ))}
+              </View>
+
+              <FlatList
+                data={createMassDate}
+                // ref={flatListRef}
+                renderItem={({ item }) => (
+                  <DateItem item={item} />
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                removeClippedSubviews={false}
+              // onLayout={scrollToIndex(UDStartDayOfYear)}
+              />
             </View>
-            {/* ----------------- END кнопки управления слева ------------------------*/}
-            <View style={styles.shifts}>
-              <View style={{ maxHeight: "100%" }}>
-                <View style={styles.headrow}>
-                  <Text style={styles.headD}>Date</Text>
-                  <Text style={styles.headW}>Week</Text>
-                  {smeniNames.map((el, index) => (
-                    <Text style={styles.headS} key={index}>
-                      {el}
-                    </Text>
-                  ))}
-                </View>
+          </View>
+        </View>
 
-                <FlatList
-                  data={createMassDate}
-                  // ref={flatListRef}
-                  renderItem={({ item }) => (
-                    <DateItem item={item} />
-                  )}
-                  keyExtractor={(item, index) => index.toString()}
-                  removeClippedSubviews={false}
-                // onLayout={scrollToIndex(UDStartDayOfYear)}
+        {/* ограничитель контента с низу чтобы не залазил под кнопки */}
+        <View style={{ height:95}}></View>
+
+        {/* модальное окно */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View
+                style={{ width: "90%", borderWidth: 0, marginVertical: 20 }}
+              >
+                <Pressable
+                  style={styles.button}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}> X </Text>
+                </Pressable>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <GlassmorphismButton
+                  title={"Week"}
+                  onPress={savedWMYcount.WMY == "W" ? null : () => setSavedWMYcount((current) => ({ WMY: "W", count: 0, }))}
+                  MyStyle={savedWMYcount.WMY == "W" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }}
                 />
+                <View style={{ marginHorizontal: 5 }} />
+                <GlassmorphismButton
+                  title={"Month"}
+                  onPress={savedWMYcount.WMY == "M" ? null : () => setSavedWMYcount((current) => ({ WMY: "M", count: 0, }))}
+                  MyStyle={savedWMYcount.WMY == "M" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }}
+                />
+                <View style={{ marginHorizontal: 5 }} />
+                <GlassmorphismButton
+                  title={"Year"}
+                  onPress={savedWMYcount.WMY == "Y" ? null : () => setSavedWMYcount((current) => ({ WMY: "Y", count: 0, }))}
+                  MyStyle={savedWMYcount.WMY == "Y" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }
+                  }
+                />
+              </View>
+
+              <NeumorphicButton
+                title={showInterval}
+                MyStyle={{ fontSize: 20 }}
+              />
+              {/* <Text>{}</Text> */}
+              <View style={{ flexDirection: "row", marginVertical: 15 }}>
+                <GlassmorphismButton
+                  title={" 👈 "}
+                  onPress={() => setSavedWMYcount((current) => ({ WMY: current.WMY, count: current.count - 1 }))}
+                />
+                <View style={{ marginHorizontal: 15 }} />
+                <GlassmorphismButton
+                  title={" ⚪️ "}
+                  onPress={() => setSavedWMYcount((current) => ({ WMY: current.WMY, count: 0 }))}
+                />
+                <View style={{ marginHorizontal: 15 }} />
+                <GlassmorphismButton
+                  title={" 👉 "}
+                  onPress={() => setSavedWMYcount((current) => ({ WMY: current.WMY, count: current.count + 1 }))}
+                />
+                {/* ➖➕✖️ 🫵 ⚪️✊*/}
               </View>
             </View>
           </View>
+        </Modal>
+      </ImageBackground>
 
-          {/* ограничитель контента с низу чтобы не залазил под кнопки */}
-          <View
-            style={{
-              height: 110,
-              borderWidth: 0,
-              borderColor: "#900",
-              // backgroundColor: "#eea"
-            }}
-          ></View>
-
-          {/* модальное окно */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <View
-                  style={{ width: "90%", borderWidth: 0, marginVertical: 20 }}
-                >
-                  <Pressable
-                    style={styles.button}
-                    onPress={() => setModalVisible(!modalVisible)}
-                  >
-                    <Text style={styles.textStyle}> X </Text>
-                  </Pressable>
-                </View>
-                <View style={{ flexDirection: "row" }}>
-                  <GlassmorphismButton
-                    title={"Week"}
-                    onPress={savedWMYcount.WMY == "W" ? null : () => setSavedWMYcount((current) => ({ WMY: "W", count: 0, }))}
-                    MyStyle={savedWMYcount.WMY == "W" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }}
-                  />
-                  <View style={{ marginHorizontal: 5 }} />
-                  <GlassmorphismButton
-                    title={"Month"}
-                    onPress={savedWMYcount.WMY == "M" ? null : () => setSavedWMYcount((current) => ({ WMY: "M", count: 0, }))}
-                    MyStyle={savedWMYcount.WMY == "M" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }}
-                  />
-                  <View style={{ marginHorizontal: 5 }} />
-                  <GlassmorphismButton
-                    title={"Year"}
-                    onPress={savedWMYcount.WMY == "Y" ? null : () => setSavedWMYcount((current) => ({ WMY: "Y", count: 0, }))}
-                    MyStyle={savedWMYcount.WMY == "Y" ? { fontSize: 22, color: "#900", opacity: 0.2 } : { fontSize: 28 }
-                    }
-                  />
-                </View>
-
-                <NeumorphicButton
-                  title={showInterval}
-                  MyStyle={{ fontSize: 20 }}
-                />
-                {/* <Text>{}</Text> */}
-                <View style={{ flexDirection: "row", marginVertical: 15 }}>
-                  <GlassmorphismButton
-                    title={" 👈 "}
-                    onPress={() => setSavedWMYcount((current) => ({WMY: current.WMY, count: current.count - 1}))}
-                  />
-                  <View style={{ marginHorizontal: 15 }} />
-                  <GlassmorphismButton
-                    title={" ⚪️ "}
-                    onPress={() =>setSavedWMYcount((current) => ({WMY: current.WMY,count: 0}))}
-                  />
-                  <View style={{ marginHorizontal: 15 }} />
-                  <GlassmorphismButton
-                    title={" 👉 "}
-                    onPress={() =>setSavedWMYcount((current) => ({WMY: current.WMY,count: current.count + 1}))}
-                  />
-                  {/* ➖➕✖️ 🫵 ⚪️✊*/}
-                </View>
-              </View>
-            </View>
-          </Modal>
-        </ImageBackground>
-      </View>
     </SafeAreaView>
   );
 }

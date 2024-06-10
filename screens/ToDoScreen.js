@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Text, SafeAreaView, FlatList } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, FlatList, ImageBackground, Pressable, Alert } from "react-native";
+import SaveAndDellButton from "../components/buttons/SaveAndDellButton";
 import Header from "../components/Header";
 import List from "../components/List";
 import Form from "../components/Form";
@@ -27,17 +28,17 @@ export default function ToDoScreen({ route, navigation }) {
 
 	useEffect(() => {
 		// Устанавливаем колбэк в параметры маршрута
-		navigation.setParams({refreshCount, refreshCallback: () => setRefreshCount(prev => prev + 1) });
+		navigation.setParams({ refreshCount, refreshCallback: () => setRefreshCount(prev => prev + 1) });
 	}, [navigation]);
 
 	listtodos.forEach((el) => (el.checked ? ++donetodo : null));
 	let notdonetodo = listtodos.length - donetodo;
-	useEffect(() => {navigation.setOptions({ tabBarBadge: notdonetodo || null })}, [listtodos]);
+	useEffect(() => { navigation.setOptions({ tabBarBadge: notdonetodo || null }) }, [listtodos]);
 
 	const widthAnim = useSharedValue(
 		`${(donetodo / listtodos.length || 0) * 100}%`
 	);
-	widthAnim.value = withSpring(`${(donetodo / listtodos.length || 0) * 100}%`, {
+	widthAnim.value = withSpring(`${(donetodo / listtodos.length || 0) * 101}%`, {
 		stiffness: 500,
 		damping: 20,
 	});
@@ -62,7 +63,7 @@ export default function ToDoScreen({ route, navigation }) {
 				}
 			})
 			.catch((error) => console.log(error));
-	}, [refreshCount,listener]);
+	}, [refreshCount, listener]);
 
 	const addTask = (inptext) => {
 		setListtodos((prevListtodos) => {
@@ -115,7 +116,7 @@ export default function ToDoScreen({ route, navigation }) {
 	};
 
 	const saveTodo = async (item) => {
-		let newItem= {...item};
+		let newItem = { ...item };
 		console.log("\n\n🚀 ~ saveTodo ~ item:", item);
 		console.log("🚀 ~ saveTodo ~ newItem:", newItem);
 
@@ -137,7 +138,7 @@ export default function ToDoScreen({ route, navigation }) {
 			trigger(Date.now());
 		} catch (e) {
 			console.error(e);
-		}console.log("\n\n22🚀22 ~ saveTodo ~ item:", item)
+		} console.log("\n\n22🚀22 ~ saveTodo ~ item:", item)
 	};
 
 	async function trigger(DateNow) { await AsyncStorage.setItem("trigger", DateNow + ""); }
@@ -148,60 +149,76 @@ export default function ToDoScreen({ route, navigation }) {
 		};
 	});
 
+	const dellAllToDo = () => {
+		Alert.alert(
+			"Confirm",
+			"Are you sure you want dell all To Do?",
+			[{text: "Cancel",style: "cancel"},{ text: "OK", onPress: () => {
+				setListtodos(() => {
+					const newListtodos = [];
+					saveData(newListtodos);
+					trigger(Date.now());
+					return newListtodos;
+				});
+			}}
+			],
+			{ cancelable: true }
+		);		
+	};
+
+	const renderFooterFlatList = () => {
+		if (listtodos.length > 5) {
+		return (<SaveAndDellButton title="Dell All To Do" onPress={dellAllToDo} SaveOrDell={0} myStyle={{fontSize:16,color:"#444"}}/>);
+		}
+		return null;
+	};
+
 	return (
 		<SafeAreaView style={styles.container}>
-			<StatusBar
-				animated={true}
-				barStyle={"light-content"}
-				style={styles.stausba}
-				hidden={false}
-				showHideTransition={"slide"}
-				backgroundColor={"#EEEEAA"}
-				// currentHeight="50%"
-				translucent={false}
-				networkActivityIndicatorVisible={true}
-			/>
-			<Header listlen={listtodos.length} donetodo={donetodo} />
-
-			<View style={[styles.body, { marginBottom: keyboardStatus ? 2 : 100 }]}>
-				<View style={{ flexDirection: "row", justifyContent: "left" }}>
-					<Animated.View style={[widthStyle]}>
-						<View
-							style={[
-								styles.progress,
-								{
-                  /*width: `${(donetodo / listtodos.length) * 100}%`,*/ backgroundColor: `rgba(${255 - (donetodo / listtodos.length) * 148
-										},${(donetodo / listtodos.length) * 158},34,.9)`,
-								},
-							]}
-						></View>
-					</Animated.View>
-					<View
-						style={{
-							width: 10,
-							height: 10,
-							backgroundColor: "#e24",
-							borderRadius: 5,
-							zIndex: 1000,
-							overflow: "visible",
-							top: -4,
-						}}
-					></View>
-				</View>
-
-				<FlatList
-					data={listtodos}
-					renderItem={({ item }) => (
-						<List
-							element={item}
-							deleteElement={deleteElement}
-							toggleCheckbox={toggleCheckbox}
-							saveTodo={saveTodo}
-						/>
-					)}
+			<ImageBackground
+				source={require("../assets/asfalt.png")}
+				style={styles.backgroundImage}
+				resizeMode="repeat">
+				<StatusBar
+					animated={true}
+					barStyle={"light-content"}
+					style={styles.stausba}
+					hidden={false}
+					showHideTransition={"slide"}
+					backgroundColor={"#EEEEAA"}
+					// currentHeight="50%"
+					translucent={false}
+					networkActivityIndicatorVisible={true}
 				/>
-				<Form addTask={addTask} />
-			</View>
+				<Header listlen={listtodos.length} donetodo={donetodo} />
+
+				<View style={styles.body}>
+					<View style={{ flexDirection: "row", justifyContent: "left" }}>
+						<Animated.View style={[widthStyle]}>
+							<View style={[styles.progress, { backgroundColor: `rgba(${255 - (donetodo / listtodos.length) * 148},${(donetodo / listtodos.length) * 158},34,.9)`	}]}
+							>
+							</View>
+						</Animated.View>
+						<View style={styles.redBoll}>
+						</View>
+					</View>
+
+					<FlatList
+						data={listtodos}
+						renderItem={({ item }) => (
+							<List
+								element={item}
+								deleteElement={deleteElement}
+								toggleCheckbox={toggleCheckbox}
+								saveTodo={saveTodo}
+							/>
+						)}
+						ListFooterComponent={renderFooterFlatList}
+					/>
+					<Form addTask={addTask} />
+				</View>
+				<View style={{ height: keyboardStatus ? 0 : 90 }}></View>
+			</ImageBackground>
 		</SafeAreaView>
 	);
 }
@@ -209,22 +226,33 @@ export default function ToDoScreen({ route, navigation }) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#eea",
+		// backgroundColor: "snow",
 		alignItems: "center",
 		justifyContent: "center",
 	},
-
 	body: {
 		flex: 1,
 		width: "100%",
-		backgroundColor: "snow",
-		borderWidth: 1,
+		// backgroundColor: "snow",
+		// borderWidth: 1,
 		justifyContent: "space-evenly",
-		zIndex: 1,
-		paddingBottom: 5,
-		borderWidth: 0,
+		zIndex: 1,		
 	},
 	progress: {
-		height: 3,
+		height: 3,		
+	},
+	redBoll: {
+		width: 10,
+		height: 10,
+		backgroundColor: "#e24",
+		borderRadius: 5,
+		zIndex: 1000,
+		overflow: "visible",
+		top: -4,
+		left:-10
+	},
+	backgroundImage: {
+		width: '100%',
+		height: '100%',
 	},
 });

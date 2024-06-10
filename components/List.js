@@ -60,7 +60,7 @@ export default function List({ element, deleteElement, toggleCheckbox, saveTodo,
         translateX.value = withDelay(300, withSpring(0, { stiffness: 500, damping: 20 }));
         opacityAnim.value = withTiming(0, { duration: 300, easing: Easing.linear });
         
-        translateSBX.value = withSequence(withSpring(300, { stiffness: 200, damping: 100 }), withDelay(300, withSpring(0, { stiffness: 1000, damping: 10, mass: .2 })));
+        translateSBX.value = withSequence(withSpring(300, { stiffness: 200, damping: 100 }), withDelay(300, withSpring(0, { stiffness: 100, damping: 100, })));
         toggleCheckbox(element.key, true);
     };
 

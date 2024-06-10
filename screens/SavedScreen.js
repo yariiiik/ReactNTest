@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, StyleSheet, Button, ImageBackground, Dimensions, FlatList, Alert } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, ImageBackground, Dimensions, FlatList, Alert, Pressable, StatusBar } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import SaveAndDellButton from "../components/buttons/SaveAndDellButton";
 import SavedList from "../components/SavedList";
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -16,7 +17,7 @@ export default function SavedScreen({ route, navigation }) {
 
 	const handleRefreshScreenB = () => {
 		// Получаем колбэк из параметров маршрута и вызываем его
-		const callback = navigation.getState().routes.find(route => route.name === 'Home')?.params?.refreshCallback;
+		const callback = navigation.getState().routes.find(route => route.name === 'ToDo')?.params?.refreshCallback;
 		if (callback) { callback() }
 	};
 
@@ -126,42 +127,38 @@ export default function SavedScreen({ route, navigation }) {
 	}
 
 	const showConfirm = () => {
-		Alert.alert(
-			"Confirm",
-			"Are you sure you want to do this?",
-			[
-				{
-					text: "Cancel",
-					onPress: () => console.log("Cancel Pressed"),
-					style: "cancel"
-				},
-				{ text: "OK", onPress: () => clearAll() }
-			],
-			{ cancelable: true }
-		);
+		valueAll.TSData.length ? (
+			Alert.alert(
+				"Confirm",
+				"Are you sure you want to do this?",
+				[
+					{
+						text: "Cancel",
+						onPress: () => console.log("Cancel Pressed"),
+						style: "cancel"
+					},
+					{ text: "OK", onPress: () => clearAll() }
+				],
+				{ cancelable: true }
+			)) : Alert.alert("You don't have any saved To Do.");
 	};
 
 	return (
-		<View style={styles.backgroundWrapper}>
+		<SafeAreaView style={styles.container}>
 			<ImageBackground
-				source={require("../assets/asfalt--dark.png")}
+				source={require("../assets/asfalt.png")}
 				style={styles.backgroundImage}
 				resizeMode="repeat">
-				<View style={styles.container}>
-					<View>
-						<Text style={styles.maintext}>Saved To Do</Text>
-					</View>
-					<FlatList data={valueAll.SSData} renderItem={({ item }) => (
-						<SavedList element={item} deleteElement={deleteElement} sendToTodo={sendToTodo} />
-					)} />
-
+				<View>
+					<Text style={styles.maintext}>Saved To Do</Text>
 				</View>
-				<View style={{ marginBottom: 90, paddingTop: 10, borderTopWidth: 3, borderColor: "#ddd", }}>
-					<Button onPress={showConfirm} title="Dell All" color="lightcoral" />
-				</View>
-
+				<FlatList style={{ borderBottomWidth: 3, borderColor: "rgba(100,100,100,0.3)" }} data={valueAll.SSData} renderItem={({ item }) => (
+					<SavedList element={item} deleteElement={deleteElement} sendToTodo={sendToTodo} />
+				)} />
+				<SaveAndDellButton title="Dell All" onPress={showConfirm} SaveOrDell={0} myStyle={{ color: "#444" }} />
+				<View style={{ height: 90}}></View>
 			</ImageBackground>
-		</View>
+		</SafeAreaView>
 	);
 }
 
@@ -170,12 +167,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		paddingTop: 10,
+		borderTopWidth: 2,
+		borderColor: "rgba(100,100,100,0.3)",
 	},
 	text: {
 		fontSize: 12,
 		fontWeight: "500",
-		// fontFamily: "",
 	},
 	backgroundWrapper: {
 		position: 'absolute',
@@ -187,10 +184,10 @@ const styles = StyleSheet.create({
 		height: '100%',
 	},
 	maintext: {
-        textAlign: "center",
-        padding: 5,
-        fontSize: 22,
-        color: "#553",
-        fontWeight: "500",
-    },
+		textAlign: "center",
+		padding: 5,
+		fontSize: 22,
+		color: "#553",
+		fontWeight: "500",
+	},	
 });

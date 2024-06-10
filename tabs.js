@@ -92,7 +92,7 @@ export default function Tabs({ keyboardStatus }) {
 				component={ToDoScreen}
 				// initialParams={{ handleUpdateData }}
 				options={{
-					tabBarShowLabel: true,
+					// tabBarShowLabel: true,
 					tabBarHideOnKeyboard: true,
 					headerShown: false,
 				}}
