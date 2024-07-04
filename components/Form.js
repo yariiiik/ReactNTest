@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button, Pressable, Text } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import SaveAndDellButton from "../components/buttons/SaveAndDellButton";
+import { useTranslation } from 'react-i18next';
 
-export default function Form({ addTask }) {
+export default function Form({ addTask, title, btntitle }) {
     const [textinput, setTextinput] = useState("");
+    const { t, i18n } = useTranslation();
     const onChange = (textinput) => {
         setTextinput(textinput)
     };
@@ -20,14 +22,14 @@ export default function Form({ addTask }) {
             <TextInput
                 style={styles.input}
                 onChangeText={onChange}
-                placeholder="Write your task"
+                placeholder={title}
                 placeholderTextColor="gray"
                 multiline
                 maxLength={100}
                 // numberOfLines={2}
                 value={textinput}
             />
-            <SaveAndDellButton title="SAVE" onPress={handlePress} SaveOrDell={1} />
+            <SaveAndDellButton title={btntitle} onPress={handlePress} SaveOrDell={1} />
         </View>
     );
 }

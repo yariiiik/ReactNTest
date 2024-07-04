@@ -4,11 +4,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import SaveAndDellButton from "../components/buttons/SaveAndDellButton";
 import SavedList from "../components/SavedList";
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 const { width, height } = Dimensions.get('window'); // Получаем размеры экрана
 
 export default function SavedScreen({ route, navigation }) {
-
+	const { t, i18n } = useTranslation();
 	const [valueAll, setValueAll] = useState({ "SSData": [], "TSData": [] });
 	const [listener, setListener] = useState("");
 
@@ -18,6 +19,7 @@ export default function SavedScreen({ route, navigation }) {
 	const handleRefreshScreenB = () => {
 		// Получаем колбэк из параметров маршрута и вызываем его
 		const callback = navigation.getState().routes.find(route => route.name === 'ToDo')?.params?.refreshCallback;
+		console.log("🚀 ~ handleRefreshScreenB ~ callback:", callback)
 		if (callback) { callback() }
 	};
 
@@ -127,7 +129,7 @@ export default function SavedScreen({ route, navigation }) {
 	}
 
 	const showConfirm = () => {
-		valueAll.TSData.length ? (
+		valueAll.SSData.length ? (
 			Alert.alert(
 				"Confirm",
 				"Are you sure you want to do this?",
@@ -150,12 +152,12 @@ export default function SavedScreen({ route, navigation }) {
 				style={styles.backgroundImage}
 				resizeMode="repeat">
 				<View>
-					<Text style={styles.maintext}>Saved To Do</Text>
+					<Text style={styles.maintext}>{t("savedtodo")}</Text>
 				</View>
 				<FlatList style={{ borderBottomWidth: 3, borderColor: "rgba(100,100,100,0.3)" }} data={valueAll.SSData} renderItem={({ item }) => (
 					<SavedList element={item} deleteElement={deleteElement} sendToTodo={sendToTodo} />
 				)} />
-				<SaveAndDellButton title="Dell All" onPress={showConfirm} SaveOrDell={0} myStyle={{ color: "#444" }} />
+				<SaveAndDellButton title={t("dellall")} onPress={showConfirm} SaveOrDell={0} myStyle={{ color: "#444" }} />
 				<View style={{ height: 90}}></View>
 			</ImageBackground>
 		</SafeAreaView>
@@ -173,11 +175,6 @@ const styles = StyleSheet.create({
 	text: {
 		fontSize: 12,
 		fontWeight: "500",
-	},
-	backgroundWrapper: {
-		position: 'absolute',
-		width: width,
-		height: height,
 	},
 	backgroundImage: {
 		width: '100%',

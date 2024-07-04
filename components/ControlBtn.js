@@ -1,15 +1,25 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import GlassmorphismButton from "./buttons/GlassmorphismButton";
 import NeumorphicButton from "./buttons/NeumorphicButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default ControlBtn = ({ onData }) => {
-  const [elements, setElements] = useState(["🍑", "🍌", "🍓", "🍒"]);
+// export default ControlBtn = ({ onData, elements }) => {
+export default ControlBtn = ({ handleFromControlBtn, firstLoad }) => {
+
+  console.log("🚀🚀🚀🚀🚀~ elements:", firstLoad);
+  let trigger;
+  // const [elements, setElements] = useState(firstLoad);
+  // useEffect(() => {
+  //   setElements(firstLoad);
+  // }, [firstLoad]);
+
+  // console.log("🚀🍺🚀 ControlBtn ~ elements:", elements);
 
   const handleButtonPress = (index) => {
-    let newElements = [...elements];
+    let newElements = firstLoad;
+    // let newElements = [...elements];
     const separatorIndex = newElements.indexOf('*');
 
     if (separatorIndex === -1) {
@@ -26,27 +36,26 @@ export default ControlBtn = ({ onData }) => {
         newElements = newElements.filter(el => el !== '*');
       }
     }
-    setElements(newElements);
-    let sendMass = [];
-    for (const item of newElements) {
-      if (item === '*') { break }
-      sendMass.push(item)
-    }
-    onData(sendMass);
+    // setElements(newElements);
+    // let sendMass = [];
+    // for (const item of newElements) {
+    //   if (item === '*') { break }
+    //   sendMass.push(item)
+    // }
+    trigger = 0;
+    handleFromControlBtn(newElements);
   };
 
-  let trigger = 0;
+  
 
-  return (
-    <View style={{ flexDirection: "column", alignItems: 'center', justifyContent: 'center', padding: 0 }}>
-      {elements.map((el, index) => {
+  return (firstLoad.length > 1 ? (
+    <View style={{ flexDirection: "column", alignItems: 'center', justifyContent: 'center', padding: 0, }}>
+      {firstLoad.map((el, index) => {
         if (el === '*') trigger = 1;
-        return (<React.Fragment key={index}>
-          {el === '*' ? <MaterialCommunityIcons name="arrow-up-down-bold-outline" size={42} color="rgba(155, 155, 155, 0.7)" key={index} /> : (trigger ? <GlassmorphismButton title={el} onPress={() => handleButtonPress(index)} key={index} /> : <NeumorphicButton title={el} onPress={() => handleButtonPress(index)} key={index} />)}
-        </React.Fragment>)
+        return (el === '*' ? <MaterialCommunityIcons name="arrow-up-down-bold-outline" size={42} color="rgba(155, 155, 155, 0.7)" key={index} /> : (trigger ? <GlassmorphismButton title={el} onPress={() => handleButtonPress(index)} key={index} /> : <NeumorphicButton title={el} onPress={() => handleButtonPress(index)} key={index} />))
       })
       }
-    </View>
+    </View>) : null
   );
 };
 

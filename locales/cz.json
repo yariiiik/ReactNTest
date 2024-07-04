@@ -1,0 +1,42 @@
+{
+  "week": "Týden",
+  "month": "Měsíc",
+  "year": "Rok",
+
+    "Monday" :"Po",
+    "Tuesday" :"Út",
+    "Wednesday" :"St",
+    "Thursday" :"Čt",
+    "Friday" :"Pá",
+    "Saturday" :"So",
+    "Sunday" :"Ne",
+    
+  "evening":"O",
+  "night":"N",
+  "morning":"R",
+
+  "cripta":"ja ne vim",
+  "todo":"Poznámky",
+  "WriteNotes":"Napište si poznámky",
+  "save": "ULOŽIT",
+  "language":"Jazyk",
+  "selectlanguage":"Vyberte jazyk",
+  "titletodo": "Poznámky",
+  "savedtodo":"Uložené poznámky",
+  "dellall": "Smazat všechny",
+  "tabdate":"Datum",
+  "tabweek":"D/T",
+  "settings":"Nastavení",
+  "theme": "Téma",
+  "lighttheme": "Světlé",
+  "darktheme": "Tmavé",
+  "graytheme": "Šedé",
+  "graf": "Rozvrh",
+  "standart": "Standard",
+  "cz-rbcb":"CZ-RBCB",
+  "ua-haes":"UA-ChNPP",
+  "ua-raes":"UA-RNPP",
+  "ua-paes":"UA-JiNPP"
+    
+  }
+ 

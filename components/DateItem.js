@@ -1,16 +1,26 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { useTranslation } from 'react-i18next';
+import MyTooltip2 from "../components/MyTooltip2";
 
 const DateItem = ({ item }) => {
+	
 	let st;
+	const { t, i18n } = useTranslation();
+	let elements={"N":"night","E":"evening","M":"morning","🍺":"🍺","☕️":"☕️"};
+	
 	return (
 		<View style={item.catchToday ? styles.rowToday : styles.row}>
-			<Text style={item.catchToday ? styles.dateToday : styles.date}>{item.day}</Text>
-			<Text style={(item.weekDay == "Sat" || item.weekDay == "Sun") ? styles.textDenNedV : styles.textDenNed}>{item.weekDay}</Text>
+			
+			<Text style={item.catchToday ? styles.dateToday : styles.date}>
+				{/* {(item.day=="24.06")&&<MyTooltip2 content={"I will preshed)))"}/>} */}
+				{item.day}
+				</Text>
+			<Text style={(item.weekDay == t("Saturday") || item.weekDay == t("Sunday")) ? styles.textDenNedV : styles.textDenNed}>{item.weekDay}</Text>
 
 			{item.shifts.map((element, index) => {
 				(element == "🍺" || element == "☕️") ? st = styles.text : st = styles["text" + element];
-				return <Text style={st} key={index.toString()}>{element}</Text>
+				return <Text style={st} key={index.toString()}>{t(elements[element])}</Text>
 			})}
 		</View>
 	);
@@ -30,7 +40,7 @@ let allcss = {
 };
 
 const styles = StyleSheet.create({
-	row: {
+	row: {position:'relative', 
 		flexDirection: 'row',
 		margin: 1,
 		borderColor: "#ccc",
@@ -45,7 +55,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#f88",
 	},
 	date: {
-		flex: 1.8,
+		flex: 1.7,
 		borderColor: "#000",
 		textAlign: "center",
 		textAlignVertical: "center",
@@ -55,7 +65,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 	},
 	dateToday: {
-		flex: 1.8,
+		flex: 1.7,
 		textAlignVertical: "center",
 		textAlign: "center",
 		fontSize: 15,
@@ -65,13 +75,13 @@ const styles = StyleSheet.create({
 		borderColor: "#ccc",
 	},
 	textDenNed: {
-		flex: 1.2,
+		flex: 1.0,
 		textAlign: "center",
 		textAlignVertical: 'center',
 		fontSize: 15,
 		fontWeight: "400",
-		borderLeftWidth: 1,
-		borderRightWidth: 1,
+		borderLeftWidth: 2,
+		borderRightWidth: 2,
 		borderRadius: 5,
 		marginHorizontal: 5,
 		color: "#000",
@@ -79,13 +89,13 @@ const styles = StyleSheet.create({
 		borderColor: "#115",
 	},
 	textDenNedV: {
-		flex: 1.2,
+		flex: 1.0,
 		textAlignVertical: 'center',
 		textAlign: "center",
 		fontSize: 15,
 		fontWeight: "900",
-		borderLeftWidth: 1,
-		borderRightWidth: 1,
+		borderLeftWidth: 2,
+		borderRightWidth: 2,
 		borderRadius: 5,
 		marginHorizontal: 5,
 		color: "#000",

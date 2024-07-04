@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 
-export default function Header({ listlen, donetodo }) {
+export default function Header({ listlen, donetodo, title }) {
     // console.log("HomeScreen -> donetodo", donetodo, listlen);
     return (
         <View style={styles.main}>
-            <Text style={styles.maintext}>To Do List:</Text>
+            <Text style={styles.maintext}>{title}:</Text>
             {(donetodo/listlen)==1?<Image source={require("../assets/iskra-1-0.gif")} style={{ width: 40, height: 40 }} />:null}
             <Text style={styles.counts}>{donetodo + " / " + listlen}</Text>
         </View>

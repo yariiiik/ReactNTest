@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(155, 155, 155, 0.5)',
     elevation: 10,
-    marginVertical: 10,
+    marginVertical: 5,
     // minWidth:54,
   },
   pressedButton: {

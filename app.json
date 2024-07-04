@@ -1,39 +1,44 @@
 {
-  "expo":{
-  "name": "VYO",
-  "slug": "todo",
-  "version": "1.0.0",
-  "orientation": "portrait",
-  "icon": "./assets/icon.png",
-  "userInterfaceStyle": "light",
-  "splash": {
-    "image": "./assets/splash.png",
-    "resizeMode": "contain",
-    "backgroundColor": "#ffffff"
-  },
-  "assetBundlePatterns": ["**/*"],
-  "ios": {
-    "supportsTablet": true   
-  },
-  "android": {
-    "adaptiveIcon": {
-      "foregroundImage": "./assets/adaptive-icon.png",
+  "expo": {
+    "name": "todo",
+    "slug": "todo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "package": "com.yavladimirovich.todo"   
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.yavladimirovich.todo"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ef591140-4b39-4202-ad55-1ca515d4a53a"
+      }
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "plugins": [
+      "expo-localization"
+    ]
   },
-  "web": {
-    "favicon": "./assets/favicon.png"
-  },
-  "extra": {
-    "eas": {
-      "projectId": "ef591140-4b39-4202-ad55-1ca515d4a53a"
-    }
-  },
-  "updates": {
-    "fallbackToCacheTimeout": 0
-  }
-},
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-2176611440724330~7666763992",
     "ios_app_id": "ca-app-pub-2176611440724330~7666763992"

@@ -8,10 +8,12 @@ import Form from "../components/Form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, } from "react-native-reanimated";
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 export default function ToDoScreen({ route, navigation }) {
 	// console.log("🚀 ~ ToDoScreen ~ navigation:", navigation.getState().routes)
-	// console.log("ToDoScreen -> route.params", route.params);
+	console.log("ToDoScreen -> route.params", route.params);
+	const { t, i18n } = useTranslation();
 	const [refreshCount, setRefreshCount] = useState(0);
 	const [listener, setListener] = useState("");
 	const [listtodos, setListtodos] = useState([
@@ -28,12 +30,12 @@ export default function ToDoScreen({ route, navigation }) {
 
 	useEffect(() => {
 		// Устанавливаем колбэк в параметры маршрута
-		navigation.setParams({ refreshCount, refreshCallback: () => setRefreshCount(prev => prev + 1) });
+		navigation.setParams({ refreshCount, refreshCallback: () => setRefreshCount(prev => prev + 1) ,});
 	}, [navigation]);
 
 	listtodos.forEach((el) => (el.checked ? ++donetodo : null));
 	let notdonetodo = listtodos.length - donetodo;
-	useEffect(() => { navigation.setOptions({ tabBarBadge: notdonetodo || null }) }, [listtodos]);
+	useEffect(() => { navigation.setOptions({ tabBarBadge: notdonetodo || null }) }, [listtodos,refreshCount]);
 
 	const widthAnim = useSharedValue(
 		`${(donetodo / listtodos.length || 0) * 100}%`
@@ -190,7 +192,7 @@ export default function ToDoScreen({ route, navigation }) {
 					translucent={false}
 					networkActivityIndicatorVisible={true}
 				/>
-				<Header listlen={listtodos.length} donetodo={donetodo} />
+				<Header listlen={listtodos.length} donetodo={donetodo} title={t("titletodo")}/>
 
 				<View style={styles.body}>
 					<View style={{ flexDirection: "row", justifyContent: "left" }}>
@@ -215,7 +217,7 @@ export default function ToDoScreen({ route, navigation }) {
 						)}
 						ListFooterComponent={renderFooterFlatList}
 					/>
-					<Form addTask={addTask} />
+					<Form addTask={addTask} title={t("WriteNotes")} btntitle={t("save")}/>
 				</View>
 				<View style={{ height: keyboardStatus ? 0 : 90 }}></View>
 			</ImageBackground>
