@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 
-const GlassmorphismButton = ({ title, onPress, MyStyle }) => (
+const GlassmorphismButton = ({ title, onPress, MyStyle, MyStyleBTN }) => (
   <Pressable
-    style={({ pressed }) => [styles.button, pressed && styles.pressedButton ]}
+    style={({ pressed }) => [styles.button, pressed && styles.pressedButton,MyStyleBTN&&{...MyStyleBTN} ]}
     onPress={onPress}  >
     {({ pressed }) => (
          <Text style={[styles.buttonText, pressed && styles.pressedButtonText,MyStyle&&{...MyStyle}]}>

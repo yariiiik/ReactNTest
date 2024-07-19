@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 
-const NeumorphicButton = ({ title, onPress, MyStyle }) => (
-  <Pressable style={({ pressed }) => [styles.button, pressed && styles.pressedButton]} onPress={onPress} >
+const NeumorphicButton = ({ title, onPress, MyStyle, MyStyleBTN  }) => (
+  <Pressable style={({ pressed }) => [styles.button, pressed && styles.pressedButton, MyStyleBTN&&{...MyStyleBTN}]} onPress={onPress} >
     {({ pressed }) => (
       <Text style={[styles.buttonText, pressed && styles.pressedButtonText,MyStyle&&{...MyStyle}]}>
         {title}
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(155, 155, 155, 0.5)',
     elevation: 10,
-    marginVertical: 5,
+    marginVertical: 5,justifyContent:"center"
     // minWidth:54,
   },
   pressedButton: {

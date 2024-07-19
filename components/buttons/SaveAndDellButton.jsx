@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 
-const SaveAndDellButton = ({ title, onPress, SaveOrDell, myStyle }) => (
-  <Pressable style={({ pressed }) => [styles.buttoneround, SaveOrDell?styles.saveButton:styles.dellButton, pressed && styles.pressedButton, pressed && (SaveOrDell?styles.pressedSaveButton:styles.pressedDellButton) ]} onPress={onPress}>
+const SaveAndDellButton = ({ title, onPress, SaveOrDell, myStyle, MyStyleBTN }) => (
+  <Pressable style={({ pressed }) => [styles.buttoneround, SaveOrDell?styles.saveButton:styles.dellButton, pressed && styles.pressedButton, pressed && (SaveOrDell?styles.pressedSaveButton:styles.pressedDellButton),MyStyleBTN&&{...MyStyleBTN} ]} onPress={onPress}>
     {({ pressed }) => (
       <Text style={[styles.buttonText,myStyle && {...myStyle}]}>
         {title}
@@ -17,11 +17,10 @@ const styles = StyleSheet.create({
 		marginHorizontal: "25%",
 		borderWidth: 1,
 		borderRadius: 5,
-		marginTop: 5,
-		marginBottom: 5,
+		marginVertical: 5,		
 	},
 	pressedButton: {	
-		marginTop: 9,
+		marginTop: 3,
     marginBottom: 1,		
 	},
 

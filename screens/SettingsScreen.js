@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions, SafeAreaView } from "react-native";
 import Dropdown from '../components/Dropdown';
-import CustomTooltip from '../components/CustomTooltip';
-import CustomModalTooltip from '../components/CustomModalTooltip';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import MyTooltip from "../components/MyTooltip";
-import MyTooltip2 from "../components/MyTooltip2";
-import { useNavigation } from "@react-navigation/native";
+// import MyTooltip from "../components/MyTooltip";
+// import MyTooltip2 from "../components/MyTooltip2";
+// import CustomTooltip from '../components/CustomTooltip';
+// import CustomModalTooltip from '../components/CustomModalTooltip';
 
 const { width, height } = Dimensions.get('window');
 
-export default function SettingsScreen({ route, navigation }) {
-	// const navigation = useNavigation();
-	const navigation2 = useNavigation();
-
+export default function SettingsScreen() {
 	
 	const { t, i18n } = useTranslation();
 
@@ -30,7 +26,7 @@ export default function SettingsScreen({ route, navigation }) {
 	};
 
 	const changeGraf = (gra, label) => {
-		navigation.setParams({ grafType: gra });
+		// navigation.setParams({ grafType: gra });
 		// navigation.navigate('Graf', { grafType: placeholder+"00" });
 		AsyncStorage.setItem("selectGraf", gra);
 	};
@@ -39,7 +35,7 @@ export default function SettingsScreen({ route, navigation }) {
 	// console.log("🚀 ~ changeLanguage ~ resolvedLanguage :", i18n.resolvedLanguage);
 
 	const [selectedLen, setSelectedLen] = useState(null);
-	const [selectedThe, setSelectedThe] = useState(null);
+	// const [selectedThe, setSelectedThe] = useState(null);
 	const [selectedGra, setSelectedGra] = useState(null);
 
 	const options_len = [
@@ -47,28 +43,30 @@ export default function SettingsScreen({ route, navigation }) {
 		{ label: 'Українська', value: 'ua' },
 		{ label: 'Čeština', value: 'cz' },
 	];
-	const options_the = [
-		{ label: t("lighttheme"), value: 'li' },
-		{ label: t("darktheme"), value: 'da' },
-		{ label: t("graytheme"), value: 'gr' },
-	];
+	// const options_the = [
+	// 	{ label: t("lighttheme"), value: 'li' },
+	// 	{ label: t("darktheme"), value: 'da' },
+	// 	{ label: t("graytheme"), value: 'gr' },
+	// ];
 	const options_gra = [
-		{ label: t("standart"), value:"standart" },
+		{ label: t("standart"), value: "standart" },
 		{ label: t("cz-rbcb"), value: "cz-rbcb" },
 		{ label: t("ua-haes"), value: "ua-haes" },
 		{ label: t("ua-raes"), value: "ua-raes" },
 		{ label: t("ua-paes"), value: "ua-paes" },
+		{ label: t("ua-zaes"), value: "ua-zaes" },
 	];
 
 	//-------------------
-	const [visible, setVisible] = useState(false);
-	const toggleTooltip = () => {
-		setVisible(!visible);
-	};
+	// const [visible, setVisible] = useState(false);
+	// const toggleTooltip = () => {
+	// 	setVisible(!visible);
+	// };
 	//------------
 
-useEffect(() => {console.log("🚀 ~ 🚀 SettingsScreen ~ useEffect:")
-}, [visible]);
+	// useEffect(() => {
+	// 	console.log("🚀 ~ 🚀 SettingsScreen ~ useEffect:")
+	// }, [visible]);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -92,19 +90,7 @@ useEffect(() => {console.log("🚀 ~ 🚀 SettingsScreen ~ useEffect:")
 						defLanguage={i18n.resolvedLanguage}
 					/>
 				</View>
-				<View style={{ marginVertical: 15, flex: 0, flexDirection: 'row', justifyContent: "start", }}>
-					<View>
-						<Text style={styles.textmodal}>{t("theme")}:</Text>
-					</View>
-					<Dropdown
-						options={options_the}
-						selectedValue={selectedThe}
-						onValueChange={(value) => setSelectedThe(value)}
-						placeholder={t("lighttheme")}
-						changeLanguage={changeTheme}
-					// defLanguage={i18n.resolvedLanguage}
-					/>
-				</View>
+
 				<View style={{ marginVertical: 15, flex: 0, flexDirection: 'row', justifyContent: "start", }}>
 					<View>
 						<Text style={styles.textmodal}>{t("graf")}:</Text>
@@ -118,7 +104,21 @@ useEffect(() => {console.log("🚀 ~ 🚀 SettingsScreen ~ useEffect:")
 					/>
 				</View>
 
-				<View style={styles.container2}>
+				{/*
+								<View style={{ marginVertical: 15, flex: 0, flexDirection: 'row', justifyContent: "start", }}>
+					<View>
+						<Text style={styles.textmodal}>{t("theme")}:</Text>
+					</View>
+					<Dropdown
+						options={options_the}
+						selectedValue={selectedThe}
+						onValueChange={(value) => setSelectedThe(value)}
+						placeholder={t("lighttheme")}
+						changeLanguage={changeTheme}
+					// defLanguage={i18n.resolvedLanguage}
+					/>
+				</View>*/}
+				{/*<View style={styles.container2}>
 					<TouchableOpacity onPress={toggleTooltip}>
 						<Text style={styles.text2}>Press me</Text>
 					</TouchableOpacity>
@@ -134,13 +134,12 @@ useEffect(() => {console.log("🚀 ~ 🚀 SettingsScreen ~ useEffect:")
 				</View>
 
 
-				<Text style={styles.text}>0елемент0	{"\n"}</Text>
+				
 
 
-				{/* <View>
+				 <View>
 					<Text style={[styles.text, { position: "relative", alignSelf: "center", borderWidth: 1, padding: 10, borderColor: "rgba(0,200,100,0.99)" }]}>Press me!!!</Text>
 					<MyTooltip2 content={"I will preshed)))"} />
-
 				</View>
 
 				<MyTooltip content={"TBERTBYRYB\nNREBNT 8 \n88888 RYBNUT"} >

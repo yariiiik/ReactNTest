@@ -2,6 +2,10 @@
   "week": "Týden",
   "month": "Měsíc",
   "year": "Rok",
+  
+  "W": "T",
+  "M": "M",
+  "Y": "R",
 
     "Monday" :"Po",
     "Tuesday" :"Út",
@@ -15,7 +19,7 @@
   "night":"N",
   "morning":"R",
 
-  "cripta":"ja ne vim",
+  "allnotifications":"Všechny upomínky",
   "todo":"Poznámky",
   "WriteNotes":"Napište si poznámky",
   "save": "ULOŽIT",
@@ -24,6 +28,16 @@
   "titletodo": "Poznámky",
   "savedtodo":"Uložené poznámky",
   "dellall": "Smazat všechny",
+  "dellalltodo":"Smazat všechny poznámky",
+  "areyousure":"Opravdu chcete smazat všechny poznámky?",
+  "wanttodothis":"Opravdu to chcete udělat?",
+  "alert": "Varování",
+  "nothingtosave": "Žádná data k uložení.\nNic jste nezadali.",
+  "donthave":"Nemáte žádné uložené poznámky.",
+  "confirm":"Potvrzení",
+  "cancel":"Zrušení",
+  "ok":"Ano",
+  "сreatefirst":"Vytvořte první poznámky.",
   "tabdate":"Datum",
   "tabweek":"D/T",
   "settings":"Nastavení",
@@ -36,7 +50,8 @@
   "cz-rbcb":"CZ-RBCB",
   "ua-haes":"UA-ChNPP",
   "ua-raes":"UA-RNPP",
-  "ua-paes":"UA-JiNPP"
+  "ua-paes":"UA-JiNPP",
+  "ua-zaes":"UA-ZNPP"
     
   }
  

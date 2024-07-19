@@ -7,7 +7,7 @@ const Dropdown = ({ options, selectedValue, onValueChange, placeholder, changeLa
 
   const handleSelect = (item) => {
     onValueChange(item.label);
-    changeLanguage(item.value,item.label);
+    changeLanguage(item.value, item.label);
     setIsOpen(false);
   };
 
@@ -28,8 +28,7 @@ const Dropdown = ({ options, selectedValue, onValueChange, placeholder, changeLa
               return defLanguage != item.value ? (
                 <TouchableOpacity
                   style={styles.dropdownItem}
-                  onPress={() => { handleSelect(item) }}
-                >
+                  onPress={() => { handleSelect(item) }}>
                   <Text style={styles.itemText}>{item.label}</Text>
                 </TouchableOpacity>
               ) : null
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: '#fff',
-    maxHeight: 200,
+    // maxHeight: 200,
   },
   dropdownItem: {
     padding: 10,

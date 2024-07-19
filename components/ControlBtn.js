@@ -1,21 +1,14 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import GlassmorphismButton from "./buttons/GlassmorphismButton";
 import NeumorphicButton from "./buttons/NeumorphicButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-// export default ControlBtn = ({ onData, elements }) => {
 export default ControlBtn = ({ handleFromControlBtn, firstLoad }) => {
 
   console.log("🚀🚀🚀🚀🚀~ elements:", firstLoad);
   let trigger;
-  // const [elements, setElements] = useState(firstLoad);
-  // useEffect(() => {
-  //   setElements(firstLoad);
-  // }, [firstLoad]);
-
-  // console.log("🚀🍺🚀 ControlBtn ~ elements:", elements);
 
   const handleButtonPress = (index) => {
     let newElements = firstLoad;
@@ -36,17 +29,9 @@ export default ControlBtn = ({ handleFromControlBtn, firstLoad }) => {
         newElements = newElements.filter(el => el !== '*');
       }
     }
-    // setElements(newElements);
-    // let sendMass = [];
-    // for (const item of newElements) {
-    //   if (item === '*') { break }
-    //   sendMass.push(item)
-    // }
     trigger = 0;
     handleFromControlBtn(newElements);
   };
-
-  
 
   return (firstLoad.length > 1 ? (
     <View style={{ flexDirection: "column", alignItems: 'center', justifyContent: 'center', padding: 0, }}>

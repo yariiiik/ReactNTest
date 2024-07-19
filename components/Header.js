@@ -6,7 +6,7 @@ export default function Header({ listlen, donetodo, title }) {
     return (
         <View style={styles.main}>
             <Text style={styles.maintext}>{title}:</Text>
-            {(donetodo/listlen)==1?<Image source={require("../assets/iskra-1-0.gif")} style={{ width: 40, height: 40 }} />:null}
+            {(donetodo / listlen) == 1 ? <Image source={require("../assets/iskra-1-0.gif")} style={{ width: 40, height: 40 }} /> : null}
             <Text style={styles.counts}>{donetodo + " / " + listlen}</Text>
         </View>
     );
@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
         alignItems: "left",
         justifyContent: "center",
         width: "100%",
-        borderTopWidth: 2, 
+        borderTopWidth: 2,
         // borderBottomWidth: 2,
-        borderColor:"rgba(100,100,100,0.3)",
+        borderColor: "rgba(100,100,100,0.3)",
     },
     maintext: {
         textAlign: "center",
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         paddingVertical: 5,
         fontWeight: "500",
-        
+
     },
 });

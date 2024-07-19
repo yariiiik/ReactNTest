@@ -6,8 +6,6 @@ import SavedList from "../components/SavedList";
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-const { width, height } = Dimensions.get('window'); // Получаем размеры экрана
-
 export default function SavedScreen({ route, navigation }) {
 	const { t, i18n } = useTranslation();
 	const [valueAll, setValueAll] = useState({ "SSData": [], "TSData": [] });
@@ -131,18 +129,12 @@ export default function SavedScreen({ route, navigation }) {
 	const showConfirm = () => {
 		valueAll.SSData.length ? (
 			Alert.alert(
-				"Confirm",
-				"Are you sure you want to do this?",
-				[
-					{
-						text: "Cancel",
-						onPress: () => console.log("Cancel Pressed"),
-						style: "cancel"
-					},
-					{ text: "OK", onPress: () => clearAll() }
-				],
+				t("confirm"),
+				t("wanttodothis"),
+				[{text: t("cancel"), onPress: () => console.log("Cancel Pressed"),style: "cancel"},
+					{ text: t("ok"), onPress: () => clearAll() }],
 				{ cancelable: true }
-			)) : Alert.alert("You don't have any saved To Do.");
+			)) : Alert.alert(t("donthave"));
 	};
 
 	return (
@@ -157,7 +149,7 @@ export default function SavedScreen({ route, navigation }) {
 				<FlatList style={{ borderBottomWidth: 3, borderColor: "rgba(100,100,100,0.3)" }} data={valueAll.SSData} renderItem={({ item }) => (
 					<SavedList element={item} deleteElement={deleteElement} sendToTodo={sendToTodo} />
 				)} />
-				<SaveAndDellButton title={t("dellall")} onPress={showConfirm} SaveOrDell={0} myStyle={{ color: "#444" }} />
+				{valueAll.SSData.length?<SaveAndDellButton title={t("dellall")} onPress={showConfirm} SaveOrDell={0} myStyle={{ color: "#444" }} />:null}
 				<View style={{ height: 90}}></View>
 			</ImageBackground>
 		</SafeAreaView>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Text, SafeAreaView, FlatList, ImageBackground, Pressable, Alert } from "react-native";
+import { StyleSheet, View, SafeAreaView, FlatList, ImageBackground, Alert } from "react-native";
 import SaveAndDellButton from "../components/buttons/SaveAndDellButton";
 import Header from "../components/Header";
 import List from "../components/List";
@@ -18,7 +18,7 @@ export default function ToDoScreen({ route, navigation }) {
 	const [listener, setListener] = useState("");
 	const [listtodos, setListtodos] = useState([
 		{
-			text: "Создать первое напоминание)",
+			text: t("сreatefirst"),
 			key: "" + Date.now(),
 			checked: false,
 			save: false,
@@ -153,24 +153,23 @@ export default function ToDoScreen({ route, navigation }) {
 
 	const dellAllToDo = () => {
 		Alert.alert(
-			"Confirm",
-			"Are you sure you want dell all To Do?",
-			[{text: "Cancel",style: "cancel"},{ text: "OK", onPress: () => {
+			t("confirm"),
+			t("areyousure"),
+			[{text: t("cancel"), style: "cancel"},{ text: t("ok"), onPress: () => {
 				setListtodos(() => {
 					const newListtodos = [];
 					saveData(newListtodos);
 					trigger(Date.now());
 					return newListtodos;
 				});
-			}}
-			],
+			}}],
 			{ cancelable: true }
 		);		
 	};
 
 	const renderFooterFlatList = () => {
 		if (listtodos.length > 5) {
-		return (<SaveAndDellButton title="Dell All To Do" onPress={dellAllToDo} SaveOrDell={0} myStyle={{fontSize:16,color:"#444"}}/>);
+		return (<SaveAndDellButton title={t("dellalltodo")} onPress={dellAllToDo} SaveOrDell={0} myStyle={{fontSize:16,color:"#444"}}/>);
 		}
 		return null;
 	};

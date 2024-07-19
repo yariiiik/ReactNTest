@@ -59,18 +59,18 @@ export default function List({ element, deleteElement, toggleCheckbox, saveTodo,
     const clickSaveTodo = () => {
         translateX.value = withDelay(300, withSpring(0, { stiffness: 500, damping: 20 }));
         opacityAnim.value = withTiming(0, { duration: 300, easing: Easing.linear });
-        
+
         translateSBX.value = withSequence(withSpring(300, { stiffness: 200, damping: 100 }), withDelay(300, withSpring(0, { stiffness: 100, damping: 100, })));
         toggleCheckbox(element.key, true);
     };
 
-     const translateStyle = useAnimatedStyle(() => {
+    const translateStyle = useAnimatedStyle(() => {
         return { transform: [{ translateX: translateX.value }] };
     });
     const translateSBStyle = useAnimatedStyle(() => {
         return { transform: [{ translateX: translateSBX.value }] };
     });
-       const iconOpacityStyle = useAnimatedStyle(() => {
+    const iconOpacityStyle = useAnimatedStyle(() => {
         return { opacity: opacityAnim.value };
     });
 
@@ -88,7 +88,7 @@ export default function List({ element, deleteElement, toggleCheckbox, saveTodo,
                                     style={{ marginRight: 10 }}
                                 />
                             )}
-                            <Text style={[styles.todotext,showChecIcon ||styles.todothroughtext]}>{element.text}</Text>
+                            <Text style={[styles.todotext, showChecIcon || styles.todothroughtext]}>{element.text}</Text>
                         </View>
 
                         <Animated.View style={[styles.iconBOX, iconOpacityStyle]} >
@@ -98,13 +98,13 @@ export default function List({ element, deleteElement, toggleCheckbox, saveTodo,
                                     size={42}
                                     color={element.save ? "gray" : "blue"}
                                     style={styles.icon}
-                                    onPress={element.save ? () => alert("This todo has already been saved") : clickSaveTodo}
+                                    onPress={element.save ? null : clickSaveTodo}
                                 />
                             </Animated.View>
                             {showChecIcon && <ChecboxAction onPress={clickChecboxAction} />}
                             <Ionicons
                                 name="close-circle-outline"
-                                size={46}
+                                size={50}
                                 color="#ff4500"
                                 style={styles.icon}
                                 onPress={() => deleteElement(element.key)}
@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
         // marginTop: 10,
         fontSize: 20,
     },
-    todothroughtext:{
-        textDecorationLine:"line-through"
+    todothroughtext: {
+        textDecorationLine: "line-through"
     },
     iconBOX: {
         flexDirection: "row",
