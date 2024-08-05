@@ -21,6 +21,8 @@
 
 
   "allnotifications": "Усі нагадування",
+  "notific": "Нагадування",
+  "graycolsch":"Сіра колірна схема",
   "todo": "Нотатки",
   "WriteNotes": "Запишіть свої нотатки",
   "save": "ЗБЕРЕГТИ",
@@ -47,6 +49,8 @@
   "darktheme": "Темна",
   "graytheme": "Сіра",
   "graf": "Графік",
+  "iweekend":"Іконки у вихідні дні",
+  "numweek":"Номер тижня",
   "standart": "Стандартний",
   "cz-rbcb": "CZ-RBCB",
   "ua-haes": "UA-ХАЕС",

@@ -7,7 +7,6 @@ const NeumorphicButton = ({ title, onPress, MyStyle, MyStyleBTN  }) => (
       <Text style={[styles.buttonText, pressed && styles.pressedButtonText,MyStyle&&{...MyStyle}]}>
         {title}
       </Text>
-
     )}
   </Pressable>
 );
@@ -21,12 +20,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(155, 155, 155, 0.5)',
     elevation: 10,
-    marginVertical: 5,justifyContent:"center"
-    // minWidth:54,
+    marginVertical: 5,
+    justifyContent:"center" 
   },
   pressedButton: {
     elevation: 6,
-    // backgroundColor: '#f88',
   },
   buttonText: {
     color: '#333333',

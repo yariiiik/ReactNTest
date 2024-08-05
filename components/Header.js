@@ -16,12 +16,10 @@ const styles = StyleSheet.create({
     main: {
         flex: 0,
         flexDirection: "row",
-        // backgroundColor: "#efefde",
         alignItems: "left",
         justifyContent: "center",
         width: "100%",
         borderTopWidth: 2,
-        // borderBottomWidth: 2,
         borderColor: "rgba(100,100,100,0.3)",
     },
     maintext: {
@@ -37,6 +35,5 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         paddingVertical: 5,
         fontWeight: "500",
-
     },
 });

@@ -12,15 +12,13 @@ export default ControlBtn = ({ handleFromControlBtn, firstLoad }) => {
 
   const handleButtonPress = (index) => {
     let newElements = firstLoad;
-    // let newElements = [...elements];
     const separatorIndex = newElements.indexOf('*');
 
     if (separatorIndex === -1) {
       // Если разделителя нет, добавить его после нажатой кнопки и переместить кнопку в начало
       let selectedEl = newElements.splice(index, 1);
       newElements.unshift('*');
-      newElements.unshift(selectedEl[0]);
-      // newElements.splice(1, 0, '*');
+      newElements.unshift(selectedEl[0]);     
     } else {
       // Если разделитель есть - Переместить кнопку вправо/влево от разделителя
       newElements.splice(separatorIndex, 0, newElements.splice(index, 1)[0]);

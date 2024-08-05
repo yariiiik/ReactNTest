@@ -48,14 +48,14 @@ export default function SettingsScreen() {
 	// 	{ label: t("darktheme"), value: 'da' },
 	// 	{ label: t("graytheme"), value: 'gr' },
 	// ];
-	const options_gra = [
-		{ label: t("standart"), value: "standart" },
-		{ label: t("cz-rbcb"), value: "cz-rbcb" },
-		{ label: t("ua-haes"), value: "ua-haes" },
-		{ label: t("ua-raes"), value: "ua-raes" },
-		{ label: t("ua-paes"), value: "ua-paes" },
-		{ label: t("ua-zaes"), value: "ua-zaes" },
-	];
+	// const options_gra = [
+	// 	{ label: t("standart"), value: "standart" },
+	// 	{ label: t("cz-rbcb"), value: "cz-rbcb" },
+	// 	{ label: t("ua-haes"), value: "ua-haes" },
+	// 	{ label: t("ua-raes"), value: "ua-raes" },
+	// 	{ label: t("ua-paes"), value: "ua-paes" },
+	// 	{ label: t("ua-zaes"), value: "ua-zaes" },
+	// ];
 
 	//-------------------
 	// const [visible, setVisible] = useState(false);
@@ -91,7 +91,7 @@ export default function SettingsScreen() {
 					/>
 				</View>
 
-				<View style={{ marginVertical: 15, flex: 0, flexDirection: 'row', justifyContent: "start", }}>
+				{/* <View style={{ marginVertical: 15, flex: 0, flexDirection: 'row', justifyContent: "start", }}>
 					<View>
 						<Text style={styles.textmodal}>{t("graf")}:</Text>
 					</View>
@@ -102,7 +102,7 @@ export default function SettingsScreen() {
 						placeholder={t("standart")}
 						changeLanguage={changeGraf}
 					/>
-				</View>
+				</View> */}
 
 				{/*
 								<View style={{ marginVertical: 15, flex: 0, flexDirection: 'row', justifyContent: "start", }}>
@@ -199,38 +199,30 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 
-	tooltipContainer: {
-		position: 'absolute',
-		bottom: '110%',
-		alignItems: 'center',
-	},
-	tooltip: {
-		backgroundColor: 'white',
-		borderRadius: 10,
-		padding: 10,
-		shadowColor: '#000',
-		// shadowOffset: { width: 110, height: 122 },
-		// shadowOpacity: 0.95, // Увеличенная тень
-		// shadowRadius: 100,
-		elevation: 25, // Увеличенная тень для Android
-	},
-	tooltipArrow: {
-		width: 0,
-		height: 0,
-		borderLeftWidth: 10,
-		borderRightWidth: 10,
-		borderTopWidth: 10,
-		borderLeftColor: 'transparent',
-		borderRightColor: 'transparent',
-		borderTopColor: 'white',
-		alignSelf: 'center',
-		marginTop: 0,
-		// shadowColor: '#000',
-		// shadowOffset: { width: 20, height: 22 },
-		// shadowOpacity: 0.5,
-		// shadowRadius: 6,
-		// elevation: 5,
-	},
+	// tooltipContainer: {
+	// 	position: 'absolute',
+	// 	bottom: '110%',
+	// 	alignItems: 'center',
+	// },
+	// tooltip: {
+	// 	backgroundColor: 'white',
+	// 	borderRadius: 10,
+	// 	padding: 10,
+	// 	shadowColor: '#000',
+	// 	elevation: 25, // Увеличенная тень для Android
+	// },
+	// tooltipArrow: {
+	// 	width: 0,
+	// 	height: 0,
+	// 	borderLeftWidth: 10,
+	// 	borderRightWidth: 10,
+	// 	borderTopWidth: 10,
+	// 	borderLeftColor: 'transparent',
+	// 	borderRightColor: 'transparent',
+	// 	borderTopColor: 'white',
+	// 	alignSelf: 'center',
+	// 	marginTop: 0,
+	// },
 
 
 });

@@ -22,12 +22,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 10,
     minWidth:40,
-    // paddingHorizontal: 15,
-    // shadowOffset: { width: 12, height: 12 },
-    // shadowOpacity: 0.99,
-    // shadowRadius: 20,
-    // shadowColor: '#f00',
-    // elevation: 5,
   },
   pressedButton: {
     shadowOffset: { width: -10, height: -10 },

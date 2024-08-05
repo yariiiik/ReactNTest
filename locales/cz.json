@@ -20,6 +20,8 @@
   "morning":"R",
 
   "allnotifications":"Všechny upomínky",
+  "notific": "Upomínky",
+  "graycolsch":"Šedé barevné schéma",
   "todo":"Poznámky",
   "WriteNotes":"Napište si poznámky",
   "save": "ULOŽIT",
@@ -46,6 +48,8 @@
   "darktheme": "Tmavé",
   "graytheme": "Šedé",
   "graf": "Rozvrh",
+  "iweekend":"Ikony na víkend",
+  "numweek":"Číslo týdne",
   "standart": "Standard",
   "cz-rbcb":"CZ-RBCB",
   "ua-haes":"UA-ChNPP",

@@ -48,6 +48,5 @@ const styles = StyleSheet.create({
         marginHorizontal: "10%",
         fontSize: 20,
         padding: 5,
-        // backgroundColor: "#aaa",
     }
 });

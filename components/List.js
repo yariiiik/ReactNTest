@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, { useSharedValue, withSpring, withDelay, withTiming, useAnimatedStyle, withSequence, cancelAnimation, runOnJS, Easing } from "react-native-reanimated";
+import Animated, { useSharedValue, withSpring, withDelay, withTiming, useAnimatedStyle, withSequence, runOnJS, Easing } from "react-native-reanimated";
 
 export default function List({ element, deleteElement, toggleCheckbox, saveTodo, }) {
     const [marginLeftValue, setMarginLeftValue] = useState(element?.checked ? -120 : -175);
@@ -30,19 +30,11 @@ export default function List({ element, deleteElement, toggleCheckbox, saveTodo,
         toggleCheckbox(element.key, false); // Вызываем функцию toggleCheckbox с ключом элемента
     };
 
-    // console.log("showIcon: - body -> ", showIcon);
-
     const toggleShowIcon = () => {
-
         setShowIcon((prev) => !prev);
-
         if (showIcon) {
-            // Очищаем текущую анимацию, если она есть
-            // cancelAnimation(slideAnim);
-            // cancelAnimation(opacityAnim);
             translateX.value = withSpring(0, { stiffness: 300, damping: 10 });
             opacityAnim.value = withTiming(0, { duration: 200, easing: Easing.inOut(Easing.ease) });
-
         } else {
             translateX.value = withSequence(
                 withSpring(marginLeftValue, { stiffness: 200, damping: 18 }),
@@ -124,7 +116,6 @@ const styles = StyleSheet.create({
         padding: 0,
         borderWidth: 0,
         borderColor: "#c00",
-        // width: "100%"
     },
     textContainer: {
         borderWidth: 0,
@@ -132,7 +123,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         paddingHorizontal: "3%",
-        // width: "90%",
     },
     todotext: {
         padding: 8,
@@ -142,7 +132,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#999",
         borderRadius: 5,
-        // marginTop: 10,
         fontSize: 20,
     },
     todothroughtext: {
@@ -151,8 +140,6 @@ const styles = StyleSheet.create({
     iconBOX: {
         flexDirection: "row",
         alignItems: "center",
-        // marginLeft: 6,
-        // marginTop: 10,
     },
     icon: {
         marginHorizontal: 5,

@@ -32,16 +32,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#999",
         borderRadius: 5,
-        // marginTop: 10,
         fontSize: 20,
         marginHorizontal: 1,
     },
     dellicon: {
         marginRight: 4,
-        // marginTop: 10,
     },
     sendicon: {
         marginRight: 2,
-        // marginTop: 10,
     }
 });
